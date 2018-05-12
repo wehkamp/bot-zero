@@ -13,5 +13,6 @@
 require("dotenv").config()
 
 module.exports = robot => {
-  console.log(process.env.Development);
+  var environment = process.env.ENVIRONMENT ? process.env.ENVIRONMENT : 'production';
+  console.log(`Running on: ${environment}`);
 };
