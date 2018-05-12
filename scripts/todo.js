@@ -47,7 +47,7 @@ module.exports = robot => {
 
             let i = 0;
             let str = "The following items are on the list:\n";
-            str += _todos.map(t => ++i + t).join("\n");
+            str += _todos.map(t => `${++i}. ${t}`).join("\n");
             res.reply(str);
         })
         
