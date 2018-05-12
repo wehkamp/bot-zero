@@ -39,11 +39,11 @@ describe("Norris tool", () => {
                 expect(pretend.messages).to.eql(
                     [
                         ['kees', '@hubot todo Boter halen'],
-                        ['hubot', '@kees Added the item to the list.'],
+                        ['hubot', '@kees Added _Boter halen_ to the list.'],
                         ['kees', '@hubot todo Kaas halen'],
-                        ['hubot', '@kees Added the item to the list.'],
+                        ['hubot', '@kees Added _Kaas halen_ to the list.'],
                         ['kees', '@hubot todo Eieren halen'],
-                        ['hubot', '@kees Added the item to the list.'],
+                        ['hubot', '@kees Added _Eieren halen_ to the list.'],
                         ['kees', '@hubot todo'],
                         ['hubot', '@kees The following items are on the list:\n1Boter halen\n2Kaas halen\n3Eieren halen'],
                         ['kees', '@hubot todo remove er'],
