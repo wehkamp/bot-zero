@@ -7,7 +7,6 @@
   "dependencies": {
     "axios": "^0.18.0",
     "dotenv": "^5.0.1",
-    "hoek": "^5.0.3",
     "hubot": "^2.19.0",
     "hubot-command-mapper": "^1.2.8",
     "hubot-help": "^0.2.2",
