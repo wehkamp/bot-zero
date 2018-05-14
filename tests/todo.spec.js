@@ -45,11 +45,11 @@ describe("Norris tool", () => {
                         ['kees', '@hubot todo Eieren halen'],
                         ['hubot', '@kees Added _Eieren halen_ to the list.'],
                         ['kees', '@hubot todo'],
-                        ['hubot', '@kees The following items are on the list:\n1Boter halen\n2Kaas halen\n3Eieren halen'],
+                        ['hubot', '@kees The following items are on the list:\n1. Boter halen\n2. Kaas halen\n3. Eieren halen'],
                         ['kees', '@hubot todo remove er'],
                         ['hubot', '@kees 2 items were removed.'],
                         ['kees', '@hubot todo list'],
-                        ['hubot', "@kees The following items are on the list:\n1Kaas halen"]
+                        ['hubot', "@kees The following items are on the list:\n1. Kaas halen"]
                     ]
                 );
             })
