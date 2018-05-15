@@ -43,7 +43,7 @@ module.exports = robot =>
       // careful with flooding the Slack API with too many
       // messages. Consider that a single command might be
       // executed by multiple users.
-      const ms = 2000;
+      const ms = 1000;
 
       let i = 1;
       const x = setInterval(() => {
@@ -54,10 +54,11 @@ module.exports = robot =>
         }
 
         const step = Math.floor(i / 10);
-        updater.update(`${steps[step]} *${i}%*`);
+        const message = `${steps[step]} *${i}%*`;
+        updater.update(message);
 
         i += 3;
-      }, 2000);
+      }, ms);
     })
     .map(robot);
 
@@ -84,9 +85,8 @@ function UpdatableMessage(channel, initialMessage) {
 
     axios
       .post(url)
-      .then(response => response.data)
-      .then(data => {
-        if (ts == null) ts = data.ts;
+      .then(response => {
+        if (ts == null) ts = response.data.ts;
       })
       .catch(ex => console.log("Something went wrong: " + ex));
   };
