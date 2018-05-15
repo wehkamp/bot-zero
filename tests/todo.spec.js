@@ -8,7 +8,7 @@ const todo = require('./../scripts/todo');
 
 require('mocha')
 
-describe('Norris tool', () => {
+describe('Todo', () => {
 
   //initializes a new version of the
   //robot before each test (the it's)
@@ -52,5 +52,5 @@ describe('Norris tool', () => {
       })
       .then(x => done())
       .catch(ex => done(ex));
-    });
+  });
 });
