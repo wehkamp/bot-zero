@@ -1,29 +1,28 @@
-//don't let the Hubot Command Mapper echo through the
-//test results - set this before loading any tool.
-process.env.HCM_VERBOSE = 'false';
+// don't let the Hubot Command Mapper echo through the
+// test results - set this before loading any tool.
+process.env.HCM_VERBOSE = 'false'
 
-const pretend = require('hubot-pretend');
-const { expect } = require('chai');
-const todo = require('./../scripts/todo');
+const pretend = require('hubot-pretend')
+const { expect } = require('chai')
+const todo = require('./../scripts/todo')
 
 require('mocha')
 
 describe('Todo', () => {
-
-  //initializes a new version of the
-  //robot before each test (the it's)
+  // initializes a new version of the
+  // robot before each test (the it's)
   beforeEach(() => {
-    pretend.name = 'hubot';
-    pretend.alias = 'hubot';
-    pretend.start();
-    todo(pretend.robot);
-  });
+    pretend.name = 'hubot'
+    pretend.alias = 'hubot'
+    pretend.start()
+    todo(pretend.robot)
+  })
 
-  //shut the bot down after each test
-  afterEach(() => pretend.shutdown());
+  // shut the bot down after each test
+  afterEach(() => pretend.shutdown())
 
   it('Scenario: add, add, add, list, remove, list', done => {
-    const user = pretend.user('kees');
+    const user = pretend.user('kees')
 
     user
       .send('@hubot todo Boter halen')
@@ -48,9 +47,9 @@ describe('Todo', () => {
             ['kees', '@hubot todo list'],
             ['hubot', '@kees The following items are on the list:\n1. Kaas halen']
           ]
-        );
+        )
       })
       .then(x => done())
-      .catch(ex => done(ex));
-  });
-});
+      .catch(ex => done(ex))
+  })
+})

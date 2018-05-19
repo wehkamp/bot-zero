@@ -10,9 +10,9 @@
 // Author:
 //  KeesCBakker (kbakker@wehkmap.nl)
 
-require("dotenv").config()
+require('dotenv').config()
 
 module.exports = robot => {
-  const environment = process.env.ENVIRONMENT || 'production';
-  console.log(`Running on: ${environment}`);
-};
+  const environment = process.env.ENVIRONMENT || 'production'
+  console.log(`Running on: ${environment}`)
+}
