@@ -4,6 +4,8 @@
 1. Provide an "empty" project to build your own Slack chat bot
 2. Provide example implementation of tool(s) / commands that run on ES6 (instead of Coffee-script).
 
+[![Build Status](https://travis-ci.org/wehkamp/bot-zero.svg?branch=master)](https://travis-ci.org/wehkamp/bot-zero)
+
 ## Getting started
 Starting this project is really easy:
 
