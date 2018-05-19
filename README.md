@@ -1,5 +1,5 @@
 # bot-zero
-<a href="https://hubot.github.com/">Hubot</a> is a fantastic project that enabled us to build great bots. The **bot-zero** project aims to give you a cleanup version with some examples that run on ES6 (instead of Coffee-script).
+<a href="https://hubot.github.com/">Hubot</a> is a fantastic project that enabled us to build great bots. The **bot-zero** project aims to give you a cleaned up version with some examples that run on ES6 (instead of Coffee-script).
 
 [![Build Status](https://travis-ci.org/wehkamp/bot-zero.svg?branch=master)](https://travis-ci.org/wehkamp/bot-zero)
 [![forever](https://david-dm.org/wehkamp/bot-zero.svg)](https://david-dm.org/wehkamp/bot-zero) 
