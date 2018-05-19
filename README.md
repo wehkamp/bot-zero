@@ -1,8 +1,5 @@
 # bot-zero
-<a href="https://hubot.github.com/">Hubot</a> is a fantastic project that enabled us to build great bots. The aim of this project is twofold:
-
-1. Provide an "empty" project to build your own Slack chat bot
-2. Provide example implementation of tool(s) / commands that run on ES6 (instead of Coffee-script).
+<a href="https://hubot.github.com/">Hubot</a> is a fantastic project that enabled us to build great bots. The **bot-zero** project aims to give you a cleanup version with some examples that run on ES6 (instead of Coffee-script).
 
 [![Build Status](https://travis-ci.org/wehkamp/bot-zero.svg?branch=master)](https://travis-ci.org/wehkamp/bot-zero)
 
