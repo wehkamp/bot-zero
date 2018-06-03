@@ -13,8 +13,10 @@ Starting this project is really easy:
 2. Clone your forked project to your pc.
 3. Goto http://slackapi.github.io/hubot-slack/#getting-a-slack-token to read up on how to get a Slack token for your bot.
 4. Add the token to your environment.
-5. Start the bot from the terminal using `npm start`.
-6. Enjoy!
+5. Open a terminal and navigate to your bot directory.
+6. Enter `npm install` to install the NodeJs packages.
+7. Start the bot using `npm start`.
+7. Enjoy!
 
 ## Good to know
 
