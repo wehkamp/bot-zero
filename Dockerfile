@@ -23,8 +23,5 @@ ENV HUBOT_SLACK_TOKEN=$HUBOT_SLACK_TOKEN
 # Build the hubot
 RUN npm install
 
-# Set the enviroment variables in .env file
-RUN echo JENKINS_API_TOKEN=$JENKINS_API_TOKEN >> .env
-
 # Start the hubot
 ENTRYPOINT ["/usr/local/bin/npm", "start"]
