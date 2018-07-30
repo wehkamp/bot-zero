@@ -6,19 +6,19 @@
   "description": "An 'empty' bot that can be the start for your own bot.",
   "dependencies": {
     "axios": "^0.18.0",
-    "dotenv": "^5.0.1",
-    "hubot": "^2.19.0",
-    "hubot-command-mapper": "^1.2.10",
+    "dotenv": "^6.0.0",
+    "hubot": "^3.0.1",
+    "hubot-command-mapper": "^1.2.11",
     "hubot-help": "^0.2.2",
-    "hubot-slack": "^4.4.0"
+    "hubot-slack": "^4.5.3"
   },
   "devDependencies": {
-    "@types/chai": "^4.1.3",
-    "@types/mocha": "^5.2.0",
+    "@types/chai": "^4.1.4",
+    "@types/mocha": "^5.2.5",
     "chai": "^4.1.2",
     "hubot-pretend": "^1.2.0",
     "husky": "^1.0.0-rc.6",
-    "mocha": "^5.1.1",
+    "mocha": "^5.2.0",
     "standard": "^11.0.1"
   },
   "engines": {
