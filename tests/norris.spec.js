@@ -78,19 +78,21 @@ describe('Norris tool', () => {
       .catch(ex => done(ex))
   })
 
-  it('Norris impersonate Cornelio Pannadero should show a random quote with Cornelio Pannadero in it.', done => {
-    pretend
-      .user('kees')
-      .send('@hubot norris impersonate Cornelio Pannadero')
-      .then(() => delay(1500))
-      .then(() => {
-        expect(pretend.messages.length).to.eql(2)
-        expect(pretend.messages[1][1]).to.match(/Cornelio/)
-        expect(pretend.messages[1][1]).to.match(/Pannadero/)
-        done()
-      })
-      .catch(ex => done(ex))
-  })
+// cannot be tested - not all quoted have this implemented
+//
+//   it('Norris impersonate Cornelio Pannadero should show a random quote with Cornelio Pannadero in it.', done => {
+//     pretend
+//       .user('kees')
+//       .send('@hubot norris impersonate Cornelio Pannadero')
+//       .then(() => delay(1500))
+//       .then(() => {
+//         expect(pretend.messages.length).to.eql(2)
+//         expect(pretend.messages[1][1]).to.match(/Cornelio/)
+//         expect(pretend.messages[1][1]).to.match(/Pannadero/)
+//         done()
+//       })
+//       .catch(ex => done(ex))
+//   })
 })
 
 function delay (timeout) {
