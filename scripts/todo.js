@@ -12,15 +12,14 @@
 const { mapper, RestParameter } = require('hubot-command-mapper')
 
 module.exports = robot => {
-
   let todos = []
 
   mapper(robot, {
-    name: "todo",
+    name: 'todo',
     commands: [{
-      name: "add",
-      alias: [""],
-      parameters: [new RestParameter("item")],
+      name: 'add',
+      alias: [''],
+      parameters: [new RestParameter('item')],
       invoke: (tool, robot, res, match, values) => {
         const item = values.item
         todos.push(item)
@@ -28,11 +27,10 @@ module.exports = robot => {
       }
     },
     {
-      name: "remove",
-      alias: ["rm", "del"],
-      parameters: [new RestParameter("item")],
+      name: 'remove',
+      alias: ['rm', 'del'],
+      parameters: [new RestParameter('item')],
       invoke: (tool, robot, res, match, values) => {
-
         let item = values.item.toLowerCase()
         let length = todos.length
         todos = todos.filter(f => f.toLowerCase().indexOf(item) === -1)
@@ -42,14 +40,12 @@ module.exports = robot => {
         } else {
           res.reply(`${i} items were removed.`)
         }
-
       }
     },
     {
-      name: "list",
-      alias: ["", "lst", "ls"],
+      name: 'list',
+      alias: ['', 'lst', 'ls'],
       invoke: (tool, robot, res, match, values) => {
-
         if (todos.length === 0) {
           res.reply('The list is empty.')
           return
@@ -59,22 +55,7 @@ module.exports = robot => {
         let str = 'The following items are on the list:\n'
         str += todos.map(t => `${++i}. ${t}`).join('\n')
         res.reply(str)
-
       }
     }]
   })
 }
-
-
-/*
-      const item = values.item
-      todos.push(item)
-      res.reply(`Added _${item}_ to the list.`)
-*/
-
-/*
-*/
-
-/*
-
-*/
