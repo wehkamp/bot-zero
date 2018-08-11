@@ -12,7 +12,7 @@ Starting this project is really easy:
 1. Fork this project (top right corner)
 2. Clone your forked project to your pc.
 3. Goto http://slackapi.github.io/hubot-slack/#getting-a-slack-token to read up on how to get a Slack token for your bot.
-4. Add the token to your environment.
+4. Add the Slack token to your .env file.
 5. Open a terminal and navigate to your bot directory.
 6. Enter `npm install` to install the NodeJs packages.
 7. Start the bot using `npm start`.
@@ -23,7 +23,7 @@ Starting this project is really easy:
 **Packages** <br/>
 We've included some packages:
 - `axios`: a promise-based HTTP client. Makes it easier to use promises of your HTTP requests.
-- `dotenv`: allows you to store environment variables in the .env file in the root of the project.
+- `cross-env`: allows you to store environment variables in the .env file in the root of the project.
 - `hubot-command-mapper`: allows for the mapping of commands with parameters to the Hubot without the need for regular expressions. 
 
 **NPM**<br/>
