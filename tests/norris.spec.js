@@ -38,7 +38,7 @@ describe('Norris tool', () => {
     pretend
       .user('kees')
       .send('@hubot norris quote')
-      .then(() => delay(1500))
+      .then(() => delay(2000))
       .then(() => {
         expect(pretend.messages.length).to.eql(2)
         expect(pretend.messages[1][1]).to.not.match(/Not even Chuck Norris/)

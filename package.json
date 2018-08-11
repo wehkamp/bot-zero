@@ -27,6 +27,7 @@
   "scripts": {
     "start": "node ./index.js",
     "test": "standard --fix && npm run mocha ./tests/**/*.spec.js",
+    "validate": "standard --fix",
     "mocha": "mocha --recursive --timeout 10000 --exit"
   },
   "main": "index.js",
