@@ -67,7 +67,7 @@ describe('Norris tool', () => {
     pretend
       .user('kees')
       .send('@hubot norris nr 10')
-      .then(() => delay(1500))
+      .then(() => delay(2000))
       .then(() => {
         expect(pretend.messages).to.eql([
           ['kees', '@hubot norris nr 10'],
