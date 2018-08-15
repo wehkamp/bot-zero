@@ -18,6 +18,29 @@ Starting this project is really easy:
 7. Start the bot using `npm start`.
 7. Enjoy!
 
+
+## How to fork this project internally in wehkamp
+GitHub doesn't allow forks on the same organization which means you can't use the fork button for wehkamp use. You can easily solve this by forking this manually.
+
+Replace bot-zero-fork with your own repo and/or use https for cloning/remotes instead of ssh.
+
+1. Create a new repo under wehkamp.
+2. Clone bot-zero. `git clone git@github.com:wehkamp/bot-zero.git bot-zero-fork`
+3. Cd into fork `cd bot-zero-fork`
+3. Setup remotes. 
+    - `git remote remove origin`
+    - `git remote add upstream git@github.com:wehkamp/bot-zero.git`
+    - `git remote add origin git@github.com:wehkamp/bot-zero-fork.git`
+    - `git push origin master`
+
+You can now pull/push to your forked repo and the original bot-zero repo.
+
+### Pulling/updating
+If you want to pull updates from the original bot-zero repo upstream you may use the command: `git pull upstream master`. This will get all commits from bot-zero master in your current branch.
+
+### Pushing
+You can also push to the original bot-zero project with `git push upstream whateverbranch` and this will push all your commits to a branch on bot-zero. Be aware though, bot-zero is public and you may leak private info.
+
 ## Good to know
 
 **Packages** <br/>
