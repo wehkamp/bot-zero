@@ -12,7 +12,7 @@ Starting this project is really easy:
 1. Fork this project (top right corner)
 2. Clone your forked project to your pc.
 3. Goto http://slackapi.github.io/hubot-slack/#getting-a-slack-token to read up on how to get a Slack token for your bot.
-4. Add the Slack token to your .env file.
+4. Copy .env.example to .env and add the Slack token to this file.
 5. Open a terminal and navigate to your bot directory.
 6. Enter `npm install` to install the NodeJs packages.
 7. Start the bot using `npm start`.
@@ -27,7 +27,7 @@ Replace bot-zero-fork with your own repo and/or use https for cloning/remotes in
 1. Create a new repo under wehkamp.
 2. Clone bot-zero. `git clone git@github.com:wehkamp/bot-zero.git bot-zero-fork`
 3. Cd into fork `cd bot-zero-fork`
-3. Setup remotes. 
+3. Setup remotes.
     - `git remote remove origin`
     - `git remote add upstream git@github.com:wehkamp/bot-zero.git`
     - `git remote add origin git@github.com:wehkamp/bot-zero-fork.git`
@@ -47,7 +47,7 @@ You can also push to the original bot-zero project with `git push upstream whate
 We've included some packages:
 - `axios`: a promise-based HTTP client. Makes it easier to use promises of your HTTP requests.
 - `cross-env`: allows you to store environment variables in the .env file in the root of the project.
-- `hubot-command-mapper`: allows for the mapping of commands with parameters to the Hubot without the need for regular expressions. 
+- `hubot-command-mapper`: allows for the mapping of commands with parameters to the Hubot without the need for regular expressions.
 
 **NPM**<br/>
 Use NPM to interact with the bot:
