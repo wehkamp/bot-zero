@@ -13,13 +13,13 @@
     "hubot-slack": "^4.5.4"
   },
   "devDependencies": {
-    "@types/chai": "^4.1.4",
+    "@types/chai": "^4.1.5",
     "@types/mocha": "^5.2.5",
-    "chai": "^4.1.2",
+    "chai": "^4.2.0",
     "hubot-pretend": "^1.2.0",
-    "husky": "^1.0.0-rc.6",
+    "husky": "^1.0.0",
     "mocha": "^5.2.0",
-    "standard": "^11.0.1"
+    "standard": "^12.0.1"
   },
   "engines": {
     "node": "0.10.x"
@@ -45,8 +45,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm test",
-      "pre-push": "npm test"
+      "pre-commit": "npm test"
     }
   },
   "directories": {
