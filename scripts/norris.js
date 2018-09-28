@@ -19,14 +19,14 @@ module.exports = robot => {
   mapper(robot, {
 
     name: 'norris',
-    
+
     // default invoke:
     invoke: (tool, robot, res) => {
       getJoke(randomQuoteUrl)
         .then(joke => res.reply(joke))
         .catch(err => res.reply('Not even Chuck Norris can deal with this one: ' + err))
     },
-    
+
     // rest of the commands:
     commands: [
       {
