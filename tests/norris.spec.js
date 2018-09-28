@@ -28,7 +28,6 @@ describe('Norris tool', () => {
       .then(() => delay(1500))
       .then(() => {
         expect(pretend.messages.length).to.eql(2)
-        expect(pretend.messages[1][1]).to.not.match(/Not even Chuck Norris/)
         done()
       })
       .catch(ex => done(ex))
@@ -41,7 +40,6 @@ describe('Norris tool', () => {
       .then(() => delay(2000))
       .then(() => {
         expect(pretend.messages.length).to.eql(2)
-        expect(pretend.messages[1][1]).to.not.match(/Not even Chuck Norris/)
         done()
       })
       .catch(ex => done(ex))
