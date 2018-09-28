@@ -1,6 +1,6 @@
 {
   "name": "bot-zero",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "author": "Wehkamp (kbakker@wehkamp.nl)",
   "description": "An 'empty' Slack Bot that can be the jumpstart for your own bot. It is based on the Hubot project.",
