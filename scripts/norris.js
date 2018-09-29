@@ -38,10 +38,7 @@ module.exports = robot => {
 
           getJoke(url)
             .then(joke => res.reply(joke))
-            .catch(err => {
-              console.log(err)
-              res.reply('Sorry, that one doesn\'t exist.')
-            })
+            .catch(_ => res.reply('Sorry, that one doesn\'t exist.'))
         }
       },
       {
