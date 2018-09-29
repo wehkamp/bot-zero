@@ -12,6 +12,10 @@ RUN npm install --production
 # running on the device.
 FROM node:alpine
 
+# Set time zone on container
+RUN apk add tzdata
+ENV TZ=Europe/Amsterdam
+
 WORKDIR /bot-zero
 
 # Copy our node_modules into our deployable container context.
