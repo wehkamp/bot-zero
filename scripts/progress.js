@@ -34,10 +34,12 @@ module.exports = robot =>
       // API - this works also for private messages to the bot
       const channel = res.message.room
 
-      const updater = new UpdatableMessage(
-        channel,
-        'Showing an example of a progress indicator... *0%*'
+      const msg = new UpdatableMessage(
+        process.env.HUBOT_SLACK_TOKEN,
+        channel
       )
+
+      msg.send('Showing an example of a progress indicator... *0%*')
 
       // careful with flooding the Slack API with too many
       // messages. Consider that a single command might be
@@ -53,7 +55,7 @@ module.exports = robot =>
 
         const step = Math.floor(i / 10)
         const message = `${steps[step]} *${i}%*`
-        updater.update(message)
+        msg.send(message)
 
         i += 3
       }, ms)
@@ -66,26 +68,49 @@ module.exports = robot =>
 // status indicators. We're not using Hubot, but the Slack API.
 // Hubot doesn't give the ts back that's needed to update the
 // message.
-function UpdatableMessage (channel, initialMessage) {
-  // use the same token as the bot.
-  const token = process.env.HUBOT_SLACK_TOKEN
-  let ts = null
-
-  this.update = function (msg) {
-    // a new message is created by chat.postMessage an update
-    // by chat.update
-    const action = ts == null ? 'postMessage' : 'update'
-    const text = encodeURIComponent(msg)
-    const url = `https://slack.com/api/chat.${action}?token=${token}&channel=${channel}&text=${text}&as_user=true&ts=${ts}`
-
-    axios
-      .post(url)
-      .then(response => {
-        if (ts == null) ts = response.data.ts
-      })
-      .catch(ex => console.log('Something went wrong: ' + ex))
+const UpdatableMessage = class {
+  constructor (token, channel) {
+    this.token = token
+    this.channel = channel
+    this.ts = null
+    this.message = null
+    this.nextMessage = null
+    this.sending = false
   }
 
-  // use the initial messag to set the ts
-  this.update(initialMessage)
+  send (msg) {
+    // don't send empty or the same message
+    if (!msg || msg === this.message) { return }
+
+    // if a message is being send, set is as the next message
+    if (this.sending) {
+      this.nextMessage = msg
+      return
+    }
+
+    this.sending = true
+    this.message = msg
+
+    sendMessage(this.token, this.channel, this.ts, msg)
+      .catch(ex => console.log('Something went wrong: ' + ex))
+      .then(ts => {
+        this.ts = ts || this.ts
+        this.sending = false
+        const msg = this.nextMessage
+        this.nextMessage = null
+        this.send(msg)
+      })
+  }
+}
+
+function sendMessage (token, channel, ts, msg) {
+  token = encodeURIComponent(token)
+  channel = encodeURIComponent(channel)
+  msg = encodeURIComponent(msg)
+
+  const action = ts ? 'update' : 'postMessage'
+  const url = `https://slack.com/api/chat.${action}?token=${token}` +
+              `&channel=${channel}&text=${msg}&as_user=true&ts=${ts}`
+
+  return axios.post(url).then(response => response.data.ts)
 }
