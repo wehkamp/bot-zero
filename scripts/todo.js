@@ -7,7 +7,7 @@
 //  hubot todo remove {input} - removes items that match the input.
 //
 // Author:
-//  KeesCBakker (kbakker@wehkmap.nl)
+//  KeesCBakker (kbakker@wehkamp.nl)
 
 const { mapper, AnyParameter } = require('hubot-command-mapper')
 
