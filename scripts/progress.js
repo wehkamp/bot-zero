@@ -5,7 +5,7 @@
 //  hubot progress - shows an example message with progress.
 //
 // Author:
-//  KeesCBakker (kbakker@wehkmap.nl)
+//  KeesCBakker (kbakker@wehkamp.nl)
 'strict'
 
 const { tool } = require('hubot-command-mapper')
