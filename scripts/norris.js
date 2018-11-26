@@ -7,7 +7,7 @@
 //  hubot norris nr {number} - shows the numbered quote.
 //
 // Author:
-//  KeesCBakker (kbakker@wehkmap.nl)
+//  KeesCBakker (kbakker@wehkamp.nl)
 
 const axios = require('axios')
 const { mapper, StringParameter, NumberParameter } = require('hubot-command-mapper')
