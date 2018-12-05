@@ -6,6 +6,8 @@
 [![coding style: JavaScript Standard Style)](https://img.shields.io/badge/code%20style-JavaScript%20Standard%20Style-ff69b4.svg)](https://standardjs.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+Blog: https://medium.com/wehkamp-techblog/jump-starting-slack-bot-projects-bot-zero-991b9654585e
+
 ## Getting started
 Starting this project is really easy:
 
