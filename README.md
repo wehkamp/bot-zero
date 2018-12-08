@@ -3,7 +3,6 @@
 
 [![Build Status](https://travis-ci.org/wehkamp/bot-zero.svg?branch=master)](https://travis-ci.org/wehkamp/bot-zero)
 [![forever](https://david-dm.org/wehkamp/bot-zero.svg)](https://david-dm.org/wehkamp/bot-zero)
-[![coding style: JavaScript Standard Style)](https://img.shields.io/badge/code%20style-JavaScript%20Standard%20Style-ff69b4.svg)](https://standardjs.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Blog: https://medium.com/wehkamp-techblog/jump-starting-slack-bot-projects-bot-zero-991b9654585e
@@ -54,7 +53,7 @@ We've included some packages:
 **NPM**<br/>
 Use NPM to interact with the bot:
 - `npm start` will start the bot.
-- `npm test` will kick of the tests of the bot. They are located in the `tests` directory. Testing is done using <a href="https://www.npmjs.com/package/hubot-pretend">Hubot Pretend</a>. It'll also tests against <a href="https://standardjs.com/">JavaScript Standard Style</a> to make sure your coding is consistent.
+- `npm test` will kick of the tests of the bot. They are located in the `tests` directory. Testing is done using <a href="https://www.npmjs.com/package/hubot-pretend">Hubot Pretend</a>.
 
 **Clean up**<br/>
 The bot was generated using the <a href="http://slackapi.github.io/hubot-slack/">Slack Developer Kit for Hubot</a>. It was "cleaned" using a script from <a href="https://keestalkstech.com/2018/04/cleaning-up-the-default-hubot-installation/">Cleaning up the Default Hubot Installation</a>.
