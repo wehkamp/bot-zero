@@ -10,25 +10,25 @@
 //  KeesCBakker (kbakker@wehkamp.nl)
 
 const axios = require('axios')
-const { mapper, StringParameter, NumberParameter } = require('hubot-command-mapper')
+const { map_tool, StringParameter, NumberParameter } = require('hubot-command-mapper')
 
 const idQuoteUrl = 'https://api.icndb.com/jokes/'
 const randomQuoteUrl = 'https://api.icndb.com/jokes/random?escape=javascript&exlude=[explicit]'
 
 module.exports = robot => {
-  mapper(robot, {
+  map_tool(robot, {
 
     name: 'norris',
-
-    // default invoke:
-    invoke: (tool, robot, res) => {
-      getJoke(randomQuoteUrl)
-        .then(joke => res.reply(joke))
-        .catch(err => res.reply('Not even Chuck Norris can deal with this one: ' + err))
-    },
-
-    // rest of the commands:
     commands: [
+      {
+        name: 'cmd',
+        alias: [''],
+        invoke: (tool, robot, res) => {
+          getJoke(randomQuoteUrl)
+            .then(joke => res.reply(joke))
+            .catch(err => res.reply('Not even Chuck Norris can deal with this one: ' + err))
+        }
+      },
       {
         name: 'nr',
         parameters: [new NumberParameter('id')],

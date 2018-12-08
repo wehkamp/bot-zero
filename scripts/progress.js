@@ -8,7 +8,7 @@
 //  KeesCBakker (kbakker@wehkamp.nl)
 'strict'
 
-const { tool } = require('hubot-command-mapper')
+const { map_command } = require('hubot-command-mapper')
 const axios = require('axios')
 
 const steps = [
@@ -25,42 +25,39 @@ const steps = [
   'Done!'
 ]
 
-module.exports = robot =>
-  tool('progress')
-    .command('show')
-    .alias('')
-    .invoke((tool, robot, res) => {
-      // the channel is needed for interaction by the Slack
-      // API - this works also for private messages to the bot
-      const channel = res.message.room
+module.exports = robot => {
+  map_command(robot, 'progress', context => {
+    // the channel is needed for interaction by the Slack
+    // API - this works also for private messages to the bot
+    const channel = context.res.message.room
 
-      const msg = new UpdatableMessage(
-        process.env.HUBOT_SLACK_TOKEN,
-        channel
-      )
+    const msg = new UpdatableMessage(
+      process.env.HUBOT_SLACK_TOKEN,
+      channel
+    )
 
-      msg.send('Showing an example of a progress indicator... *0%*')
+    msg.send('Showing an example of a progress indicator... *0%*')
 
-      // careful with flooding the Slack API with too many
-      // messages. Consider that a single command might be
-      // executed by multiple users.
-      const ms = 1000
+    // careful with flooding the Slack API with too many
+    // messages. Consider that a single command might be
+    // executed by multiple users.
+    const ms = 1000
 
-      let i = 1
-      const x = setInterval(() => {
-        if (i > 100) {
-          i = 100
-          clearInterval(x)
-        }
+    let i = 1
+    const x = setInterval(() => {
+      if (i > 100) {
+        i = 100
+        clearInterval(x)
+      }
 
-        const step = Math.floor(i / 10)
-        const message = `${steps[step]} *${i}%*`
-        msg.send(message)
+      const step = Math.floor(i / 10)
+      const message = `${steps[step]} *${i}%*`
+      msg.send(message)
 
-        i += 3
-      }, ms)
-    })
-    .map(robot)
+      i += 3
+    }, ms)
+  })
+}
 
 // This will create an object that stores all the details of the
 // message and the channel. Because the message can be updated
@@ -110,7 +107,7 @@ function sendMessage (token, channel, ts, msg) {
 
   const action = ts ? 'update' : 'postMessage'
   const url = `https://slack.com/api/chat.${action}?token=${token}` +
-              `&channel=${channel}&text=${msg}&as_user=true&ts=${ts}`
+    `&channel=${channel}&text=${msg}&as_user=true&ts=${ts}`
 
   return axios.post(url).then(response => response.data.ts)
 }
