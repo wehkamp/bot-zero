@@ -11,13 +11,13 @@ require('mocha')
 
 describe('Hubot-help', () => {
   it('Display query for help.', done => {
-    pretend.read('./node_modules/hubot-help/src/help.coffee').start()
+    pretend.read('./node_modules/hubot-help/src/help.js').start()
     pretend.user('kees')
-      .send('@hubot help help')
+      .send('@hubot help')
       .then(x => {
         expect(pretend.messages).to.eql(
           [
-            ['kees', '@hubot help help'],
+            ['kees', '@hubot help'],
             ['hubot', 'hubot help - Displays all of the help commands that this bot knows about.\nhubot help <query> - Displays all help commands that match <query>.']
           ]
         )

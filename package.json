@@ -7,17 +7,17 @@
   "dependencies": {
     "axios": "^0.18.0",
     "cross-env": "^5.2.0",
-    "hubot": "^3.1.1",
+    "hubot": "^3.3.1",
     "hubot-command-mapper": "^2.2.5",
-    "hubot-help": "^0.2.2",
-    "hubot-slack": "^4.5.5"
+    "hubot-help": "^1.0.1",
+    "hubot-slack": "^4.6.0"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
-    "@types/mocha": "^5.2.5",
+    "@types/mocha": "^5.2.6",
     "chai": "^4.2.0",
     "hubot-pretend": "^1.2.0",
-    "mocha": "^5.2.0"
+    "mocha": "^6.0.2"
   },
   "engines": {
     "node": "0.10.x"
