@@ -17,7 +17,7 @@
     "@types/mocha": "^5.2.6",
     "chai": "^4.2.0",
     "hubot-pretend": "^1.2.0",
-    "mocha": "^6.0.2"
+    "mocha": "^6.1.2"
   },
   "engines": {
     "node": "0.10.x"
