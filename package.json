@@ -5,19 +5,20 @@
   "author": "Wehkamp (kbakker@wehkamp.nl)",
   "description": "An 'empty' Slack Bot that can be the jumpstart for your own bot. It is based on the Hubot project.",
   "dependencies": {
-    "axios": "^0.18.0",
-    "cross-env": "^5.2.0",
-    "hubot": "^3.3.1",
-    "hubot-command-mapper": "^2.2.5",
+    "axios": "^0.19.0",
+    "cross-env": "^6.0.3",
+    "hubot": "^3.3.2",
+    "hubot-command-mapper": "^2.3.6",
     "hubot-help": "^1.0.1",
-    "hubot-slack": "^4.6.0"
+    "hubot-slack": "^4.7.1",
+    "npm-force-resolutions": "0.0.3"
   },
   "devDependencies": {
-    "@types/chai": "^4.1.7",
-    "@types/mocha": "^5.2.6",
+    "@types/chai": "^4.2.6",
+    "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
     "hubot-pretend": "^1.2.0",
-    "mocha": "^6.1.2"
+    "mocha": "^6.2.2"
   },
   "engines": {
     "node": "0.10.x"
@@ -25,7 +26,8 @@
   "scripts": {
     "start": "node ./index.js",
     "test": "npm run mocha ./tests/**/*.spec.js",
-    "mocha": "mocha --recursive --timeout 10000 --exit"
+    "mocha": "mocha --recursive --timeout 10000 --exit",
+    "audit-fix": "npm audit fix --force & npm install & npx npm-force-resolutions & npm install"
   },
   "main": "index.js",
   "standard": {
@@ -51,5 +53,13 @@
   "bugs": {
     "url": "https://github.com/wehkamp/bot-zero/issues"
   },
-  "homepage": "https://github.com/wehkamp/bot-zero#readme"
+  "homepage": "https://github.com/wehkamp/bot-zero#readme",
+  "resolutions": {
+    "morgan": "1.9.1",
+    "base64-url": "2.3.2",
+    "mime": "1.4.1",
+    "debug": "3.1.0",
+    "fresh": "0.5.2",
+    "negotiator": "0.6.1"
+  }
 }
