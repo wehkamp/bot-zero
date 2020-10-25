@@ -1,24 +1,24 @@
 {
   "name": "bot-zero",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "author": "Wehkamp (kbakker@wehkamp.nl)",
-  "description": "An 'empty' Slack Bot that can be the jumpstart for your own bot. It is based on the Hubot project.",
+  "description": "An 'empty' Slack Bot that can be the jump start for your own bot. It is based on the Hubot project.",
   "dependencies": {
-    "axios": "^0.19.0",
-    "cross-env": "^6.0.3",
+    "axios": "^0.21.0",
+    "cross-env": "^7.0.2",
     "hubot": "^3.3.2",
-    "hubot-command-mapper": "^2.3.6",
+    "hubot-command-mapper": "^2.3.12",
     "hubot-help": "^1.0.1",
-    "hubot-slack": "^4.7.1",
+    "hubot-slack": "^4.8.1",
     "npm-force-resolutions": "0.0.3"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.6",
-    "@types/mocha": "^5.2.7",
+    "@types/chai": "^4.2.14",
+    "@types/mocha": "^8.0.3",
     "chai": "^4.2.0",
     "hubot-pretend": "^1.2.0",
-    "mocha": "^6.2.2"
+    "mocha": "^8.2.0"
   },
   "engines": {
     "node": "0.10.x"
