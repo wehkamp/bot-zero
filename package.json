@@ -5,7 +5,7 @@
   "author": "Wehkamp (kbakker@wehkamp.nl)",
   "description": "An 'empty' Slack Bot that can be the jump start for your own bot. It is based on the Hubot project.",
   "dependencies": {
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "cross-env": "^7.0.2",
     "hubot": "^3.3.2",
     "hubot-command-mapper": "^2.3.12",
