@@ -3,3 +3,5 @@ node_modules
 .hubot_history
 .env
 .vs
+.vscode/settings.json
+dist

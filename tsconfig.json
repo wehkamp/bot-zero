@@ -1,0 +1,20 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "ES2018",
+        "module": "commonjs",
+        "outDir": "dist",
+        "esModuleInterop": true,
+        "lib": [
+            "es2018",
+            "DOM"
+        ]
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}
