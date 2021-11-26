@@ -1,66 +1,45 @@
 {
   "name": "bot-zero",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "private": true,
   "author": "Wehkamp (kbakker@wehkamp.nl)",
   "description": "An 'empty' Slack Bot that can be the jump start for your own bot. It is based on the Hubot project.",
   "dependencies": {
-    "axios": "^0.21.0",
-    "cross-env": "^7.0.2",
+    "@slack/web-api": "^6.5.1",
+    "chalk-with-markers": "^1.0.24",
+    "cross-env": "^7.0.3",
     "hubot": "^3.3.2",
-    "hubot-command-mapper": "^2.3.12",
+    "hubot-command-mapper": "^2.3.13",
     "hubot-help": "^1.0.1",
-    "hubot-slack": "^4.8.1",
-    "npm-force-resolutions": "0.0.3"
+    "hubot-slack": "^4.9.0",
+    "node-fetch": "^2.6.6",
+    "typescript": "^4.4.4"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.14",
-    "@types/mocha": "^8.0.3",
-    "chai": "^4.2.0",
-    "hubot-pretend": "^1.2.0",
-    "mocha": "^8.2.0"
+    "@types/node": "^16",
+    "del-cli": "^3.0.1",
+    "ts-node": "^10.4.0",
+    "ts-node-dev": "^1.1.8"
   },
   "engines": {
     "node": "0.10.x"
   },
   "scripts": {
-    "start": "node ./index.js",
-    "test": "npm run mocha ./tests/**/*.spec.js",
-    "mocha": "mocha --recursive --timeout 10000 --exit",
-    "audit-fix": "npm audit fix --force & npm install & npx npm-force-resolutions & npm install"
+    "start": "node ./dist/src/index.js",
+    "dev": "npm run clean --silent & ts-node-dev --tree-kill --respawn --watch '*.json,src/**/*.ts,*.env' --transpile-only src/index.ts",
+    "audit-fix": "npm audit fix --force & npm install & npx npm-force-resolutions & npm install",
+    "build": "tsc",
+    "clean": "del-cli dist",
+    "test": "echo \"Bot Zero II has no tests...\" & exit 0"
   },
-  "main": "index.js",
-  "standard": {
-    "globals": [
-      "describe",
-      "context",
-      "before",
-      "beforeEach",
-      "after",
-      "afterEach",
-      "it",
-      "expect"
-    ]
-  },
-  "directories": {
-    "test": "tests"
-  },
+  "main": "dist/scr/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wehkamp/bot-zero.git"
   },
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/wehkamp/bot-zero/issues"
   },
-  "homepage": "https://github.com/wehkamp/bot-zero#readme",
-  "resolutions": {
-    "morgan": "1.9.1",
-    "base64-url": "2.3.2",
-    "mime": "1.4.1",
-    "debug": "3.1.0",
-    "fresh": "0.5.2",
-    "negotiator": "0.6.1",
-    "ws": "3.3.1"
-  }
+  "homepage": "https://github.com/wehkamp/bot-zero#readme"
 }
