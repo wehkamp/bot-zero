@@ -242,7 +242,7 @@ export class UpdatableMessage {
   }
 }
 
-function delay<T>(ms: number, val: T): Promise<T> {
+export function delay<T>(ms: number, val: T): Promise<T> {
   return new Promise<T>(r => {
     setTimeout(() => {
       r(val)
