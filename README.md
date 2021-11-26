@@ -52,8 +52,7 @@ We've included some packages:
 
 **NPM**<br/>
 Use NPM to interact with the bot:
-- `npm start` will start the bot.
-- `npm test` will kick of the tests of the bot. They are located in the `tests` directory. Testing is done using <a href="https://www.npmjs.com/package/hubot-pretend">Hubot Pretend</a>.
+- `npm run dev` will start the bot and restart on errors.
 
 **Clean up**<br/>
 The bot was generated using the <a href="http://slackapi.github.io/hubot-slack/">Slack Developer Kit for Hubot</a>. It was "cleaned" using a script from <a href="https://keestalkstech.com/2018/04/cleaning-up-the-default-hubot-installation/">Cleaning up the Default Hubot Installation</a>.
