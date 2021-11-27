@@ -7,7 +7,24 @@ import fs from "fs"
 import { spawn } from "child_process"
 import { chalker } from "chalk-with-markers"
 
-function startHubot(params: string[]) {
+function compileAndStart(params: string[]) {
+  console.log()
+  console.log(chalker.colorize("[p]Compiling..."))
+
+  let npm = /^win/.test(process.platform) ? "npm.cmd" : "npm"
+  spawn(npm, ["run", "build", "--silent"], { stdio: "inherit" }).on(
+    "close",
+    code => {
+      if (code != 0) {
+        process.exit(-1)
+      }
+
+      start(params)
+    }
+  )
+}
+
+function start(params: string[]) {
   // dist directory must be available, it is after building
   if (process.env.TS_NODE_DEV) {
     fs.copyFileSync("./external-scripts.json", "./dist/external-scripts.json")
@@ -41,14 +58,7 @@ params.push("--disable-httpd")
 // do a build first, so we have a filled scripts
 // directory for Hubot
 if (process.env.TS_NODE_DEV) {
-  console.log()
-  console.log(chalker.colorize("[p]Compiling..."))
-
-  let npm = /^win/.test(process.platform) ? "npm.cmd" : "npm"
-  spawn(npm, ["run", "build", "--silent"], { stdio: "inherit" }).on(
-    "close",
-    () => startHubot(params)
-  )
+  compileAndStart(params)
 } else {
-  startHubot(params)
+  start(params)
 }
