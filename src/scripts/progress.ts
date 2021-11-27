@@ -9,7 +9,7 @@
 "strict"
 
 import { map_command } from "hubot-command-mapper"
-import { createUpdatableMessage } from "../common/slack"
+import { createUpdatableMessage, SimpleMessage } from "../common/slack"
 
 const steps = [
   "Preparing environment...",
@@ -36,7 +36,7 @@ module.exports = robot => {
     // careful with flooding the Slack API with too many
     // messages. Consider that a single command might be
     // executed by multiple users.
-    const ms = 1000
+    const ms = 750
 
     let i = 1
     const x = setInterval(() => {
@@ -45,8 +45,20 @@ module.exports = robot => {
         clearInterval(x)
       }
 
-      const step = Math.floor(i / 10)
-      const message = `${steps[step]} *${i}%*`
+      const step = Math.floor(i / (steps.length - 1))
+      const message: SimpleMessage = {
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `${steps[step]} *${i}*%`,
+            },
+          },
+        ],
+        text: `${steps[step]} ${i}%`,
+      }
+
       msg.send(message)
 
       i += 3

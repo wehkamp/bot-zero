@@ -4,6 +4,8 @@ import {
   WebAPICallResult,
   ChatUpdateArguments,
   ChatPostMessageArguments,
+  KnownBlock,
+  Block,
 } from "@slack/web-api"
 
 export interface ProfileWebAPICallResult extends WebAPICallResult {
@@ -48,8 +50,18 @@ export interface ChatUpdateMessageWebAPICallResult extends WebAPICallResult {
   text: string
 }
 
+export type SimpleMessage = {
+  text?: string
+  blocks?: (KnownBlock | Block)[]
+}
+
+type SendableMessage =
+  | SimpleMessage
+  | ChatPostMessageArguments
+  | ChatUpdateArguments
+  | string
+
 interface ISlackAdapters {
-  port: string
   web: WebClient
   getBotInfo(): Promise<IBotInfo>
 }
@@ -139,7 +151,7 @@ export async function sendMessage(
   )) as ChatPostMessageWebAPICallResult
 }
 
-function isString(value) {
+function isString(value: any) {
   return typeof value === "string" || value instanceof String
 }
 
@@ -177,9 +189,7 @@ export class UpdatableMessage {
     return await delay(500, this._ts)
   }
 
-  async send(
-    msg: ChatPostMessageArguments | ChatUpdateArguments | string
-  ): Promise<void> {
+  async send(msg: SendableMessage): Promise<void> {
     // don't send empty or the same message
     if (!msg || msg === this._message) {
       return
