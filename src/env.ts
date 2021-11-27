@@ -1,4 +1,5 @@
 import fs from "fs"
+import { chalker } from "chalk-with-markers"
 
 export function getConfig(envFile) {
   if (fs.existsSync(envFile)) {
@@ -20,28 +21,47 @@ export function getConfig(envFile) {
   ]
 }
 
-export function validateToken(config) {
-  const tokenStart = "xoxb-"
+function errorAndExit(problem: string, details: string) {
+  console.log()
+  console.log(chalker.colorize("[y]" + problem + "[q] " + details))
+  console.log()
+  process.exit()
+}
 
-  // check for Hubot token in config
-  let token = config.find(c => c.indexOf("HUBOT_SLACK_TOKEN") === 0)
-  if (token && token.indexOf("=") !== -1) return token.split("=")[1]
-  else token = process.env.HUBOT_SLACK_TOKEN
+export function validateToken(config: string[]) {
+  const envMsg =
+    "your environment variables (for production) or to your .env file (for local development)."
 
-  if (!token || token.length === 0) {
-    console.log(
-      "\x1b[33mNo HUBOT_SLACK_TOKEN found.\x1b[0m Please add it to your environment variables (for production) or to your .env file (for local development).\n"
-    )
-    process.exit()
-  } else if (
-    token.indexOf(tokenStart) !== 0 ||
-    token.length <= tokenStart.length
-  ) {
-    console.warn(
-      "\x1b[33mInvalid HUBOT_SLACK_TOKEN found.\x1b[0m Please check your environment variable (for production) or your .env file (for local development).\n"
-    )
-    process.exit()
+  let token =
+    config
+      .map(x => x.split("="))
+      .filter(x => x[0] == "HUBOT_SLACK_TOKEN")
+      .map(x => x[1].trim())
+      .find(Boolean) || process.env.HUBOT_SLACK_TOKEN
+
+  if (token.startsWith('"') && token.endsWith('"')) {
+    token = token.substr(1, token.length - 2)
   }
+
+  if (!token || token.length == 0) {
+    errorAndExit("No HUBOT_SLACK_TOKEN found.", "Please add it to " + envMsg)
+  }
+
+  if (token.length < 10) {
+    errorAndExit(
+      "Invalid HUBOT_SLACK_TOKEN.",
+      "Please add the whole token to" + envMsg
+    )
+  }
+  const tokenStart = "xoxb-"
+  if (!token.startsWith(tokenStart)) {
+    errorAndExit(
+      "Invalid HUBOT_SLACK_TOKEN type.",
+      "Please add the 'xoxb-' token to" + envMsg
+    )
+  }
+
+  return token
 }
 
 export function convertConfigIntoParameters(config) {
