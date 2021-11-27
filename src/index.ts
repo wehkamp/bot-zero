@@ -1,4 +1,8 @@
-import { getConfig, validateToken, convertConfigIntoParameters } from "./env"
+import {
+  getConfig,
+  validateToken,
+  convertConfigIntoCrossEnvParameters,
+} from "./env"
 import fs from "fs"
 import { spawn } from "child_process"
 import { chalker } from "chalk-with-markers"
@@ -27,7 +31,7 @@ const config = getConfig("./.env")
 validateToken(config)
 
 // convert config into Hubot start
-const params = convertConfigIntoParameters(config)
+const params = convertConfigIntoCrossEnvParameters(config)
 params.push("hubot")
 params.push("--adapter")
 params.push("slack")

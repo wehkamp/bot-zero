@@ -1,10 +1,10 @@
 import fs from "fs"
 import { chalker } from "chalk-with-markers"
 
-export function getConfig(envFile) {
-  if (fs.existsSync(envFile)) {
+export function getConfig(envFilePath: string) {
+  if (fs.existsSync(envFilePath)) {
     return fs
-      .readFileSync(envFile, "utf-8")
+      .readFileSync(envFilePath, "utf-8")
       .split("\n")
       .filter(l => l && l.indexOf("=") !== -1 && l.indexOf("#") !== 0)
       .concat([
@@ -63,8 +63,8 @@ export function validateToken(config: string[]) {
   return token
 }
 
-export function convertConfigIntoParameters(config) {
-  const params = []
+export function convertConfigIntoCrossEnvParameters(config: string[]) {
+  const params = new Array<string>()
 
   config.forEach((c, index) => {
     c = c.trim()

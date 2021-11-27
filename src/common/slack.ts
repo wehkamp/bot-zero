@@ -55,26 +55,26 @@ export type BlockMessage = {
   blocks?: (KnownBlock | Block)[]
 }
 
-type SendableMessage =
+type Message =
   | BlockMessage
   | ChatPostMessageArguments
   | ChatUpdateArguments
   | string
 
-interface ISlackAdapters {
+type SlackAdapters = {
   web: WebClient
-  getBotInfo(): Promise<IBotInfo>
+  getBotInfo(): Promise<BotInfo>
 }
 
-interface IBotInfo {
+type BotInfo = {
   botId: string
   botName: string
   appId: string
   appUrl: string
 }
 
-export function start(token: string): ISlackAdapters {
-  const result: ISlackAdapters = <any>{
+export function start(token: string) {
+  return <SlackAdapters>{
     web: new WebClient(token),
     getBotInfo: async function () {
       const auth = await this.web.auth.test()
@@ -90,8 +90,6 @@ export function start(token: string): ISlackAdapters {
       }
     },
   }
-
-  return result
 }
 
 export function createWebClient(token: string = null): WebClient {
@@ -103,29 +101,30 @@ export function createUpdatableMessage(channel: string | IContext) {
   let channelId = ""
   let thread_ts = null
 
-  if ((<any>channel).res) {
+  if (isString(channel)) {
+    channelId = channel
+  } else {
     channelId = (<IContext>channel).res.message.room
     thread_ts = (<any>channel).res.message.thread_ts
-  } else {
-    channelId = <string>channel
   }
 
   return new UpdatableMessage(createWebClient(), channelId, null, thread_ts)
 }
 
-export async function upload(
+export function upload(
   comment: string,
   fileName: string,
   channel: string,
   buffer: Buffer,
-  thread_ts: string
+  thread_ts: string,
+  filetype: "jpg",
+  token: string = null
 ) {
-  const web = createWebClient()
-  await web.files.upload({
+  return createWebClient(token).files.upload({
     filename: fileName,
     file: buffer,
     channels: channel,
-    filetype: "jpg",
+    filetype: filetype,
     initial_comment: comment,
     title: fileName,
     thread_ts: thread_ts,
@@ -135,61 +134,45 @@ export async function upload(
 export async function sendMessage(
   webClient: WebClient,
   msg: ChatPostMessageArguments | ChatUpdateArguments
-): Promise<
-  ChatPostMessageWebAPICallResult | ChatUpdateMessageWebAPICallResult
-> {
+) {
   if (msg.ts) {
-    return (await webClient.chat.update(
-      msg as ChatUpdateArguments
-    )) as ChatUpdateMessageWebAPICallResult
+    let args = msg as ChatUpdateArguments
+    let result = await webClient.chat.update(args)
+    return result as ChatUpdateMessageWebAPICallResult
+  } else {
+    msg.thread_ts = msg.thread_ts || ""
+    let args = msg as ChatPostMessageArguments
+    let result = await webClient.chat.postMessage(args)
+    return result as ChatPostMessageWebAPICallResult
   }
-
-  msg.thread_ts = msg.thread_ts || ""
-
-  return (await webClient.chat.postMessage(
-    msg as ChatPostMessageArguments
-  )) as ChatPostMessageWebAPICallResult
 }
 
-function isString(value: any) {
-  return typeof value === "string" || value instanceof String
+function isString(x: any): x is string {
+  return typeof x === "string"
 }
 
 export class UpdatableMessage {
-  private _channel: string
-  private _ts: string | null
-  private _message: any
-  private _nextMessage: any
+  private _message: Message
+  private _nextMessage: Message
   private _sendingProm: Promise<void> | null
-  private _sending: boolean
-  private _webClient: WebClient
-  private _threadTs: string
+  private _sending = false
 
   constructor(
-    webClient: WebClient,
-    channel: string,
-    ts: string | null = null,
-    threadTs: string | null = null
-  ) {
-    this._channel = channel
-    this._ts = ts
-    this._threadTs = threadTs
-    this._message = null
-    this._nextMessage = null
-    this._sendingProm = null
-    this._sending = false
-    this._webClient = webClient
-  }
+    private readonly webClient: WebClient,
+    private channel: string,
+    private ts: string | null = null,
+    private readonly threadTs: string | null = null
+  ) {}
 
   async wait(): Promise<string | null> {
-    if (this._sendingProm != null) {
+    if (this._sendingProm) {
       await this._sendingProm
     }
 
-    return await delay(500, this._ts)
+    return await delay(500, this.ts)
   }
 
-  async send(msg: SendableMessage): Promise<void> {
+  async send(msg: Message): Promise<void> {
     // don't send empty or the same message
     if (!msg || msg === this._message) {
       return
@@ -204,24 +187,24 @@ export class UpdatableMessage {
 
     if (isString(msg)) {
       msg = <any>{
-        ts: this._ts,
-        channel: this._channel,
+        ts: this.ts,
+        channel: this.channel,
         text: msg,
         as_user: true,
-        thread_ts: this._threadTs,
+        thread_ts: this.threadTs,
       }
     } else {
-      ;(<any>msg).ts = this._ts
-      ;(<any>msg).channel = this._channel
+      ;(<any>msg).ts = this.ts
+      ;(<any>msg).channel = this.channel
       ;(<any>msg).as_user = true
-      ;(<any>msg).thread_ts = this._threadTs
+      ;(<any>msg).thread_ts = this.threadTs
     }
 
     this._sending = true
     this._message = msg
-    this._sendingProm = sendMessage(this._webClient, <any>msg).then(x => {
-      this._ts = this._ts || x.ts
-      this._channel = this._channel || x.channel
+    this._sendingProm = sendMessage(this.webClient, <any>msg).then(x => {
+      this.ts = this.ts || x.ts
+      this.channel = this.channel || x.channel
       this._sending = false
 
       const msg = this._nextMessage
@@ -233,11 +216,11 @@ export class UpdatableMessage {
   }
 
   getTs() {
-    return this._ts
+    return this.ts
   }
 
   getChannel() {
-    return this._channel
+    return this.channel
   }
 
   async delete() {
@@ -245,9 +228,9 @@ export class UpdatableMessage {
       await this._sendingProm
     }
 
-    await this._webClient.chat.delete({
-      ts: this._ts,
-      channel: this._channel,
+    await this.webClient.chat.delete({
+      ts: this.ts,
+      channel: this.channel,
     })
   }
 }
