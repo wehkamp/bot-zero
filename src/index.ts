@@ -5,7 +5,7 @@ import { chalker } from "chalk-with-markers"
 
 function startHubot(params: string[]) {
   // dist directory must be available, it is after building
-  if (params.indexOf("ENVIRONMENT=local") != -1) {
+  if (process.env.TS_NODE_DEV) {
     fs.copyFileSync("./external-scripts.json", "./dist/external-scripts.json")
   }
 

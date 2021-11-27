@@ -13,7 +13,6 @@ export function getConfig(envFile) {
   }
 
   return [
-    "ENVIRONMENT=production",
     "INSTALLED_TEAM_ONLY=true",
     "HUBOT_HELP_DISABLE_HTTP=true",
     "HUBOT_LOG_LEVEL=error",
