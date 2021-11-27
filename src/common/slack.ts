@@ -61,7 +61,7 @@ interface IBotInfo {
   appUrl: string
 }
 
-export function start(token: string, port: number): ISlackAdapters {
+export function start(token: string): ISlackAdapters {
   const result: ISlackAdapters = <any>{
     web: new WebClient(token),
     getBotInfo: async function () {

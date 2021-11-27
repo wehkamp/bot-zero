@@ -17,8 +17,7 @@ module.exports = async (robot: Hubot.Robot) => {
   removeTrailingBotWhitespaceCharactersFromIncommingMessages(robot)
 
   // setup adapters
-  const port = Number(process.env.PORT) || 5000
-  const adapters = start(process.env.HUBOT_SLACK_TOKEN, port)
+  const adapters = start(process.env.HUBOT_SLACK_TOKEN)
   const info = await adapters.getBotInfo()
 
   // splash screen
@@ -29,7 +28,6 @@ module.exports = async (robot: Hubot.Robot) => {
     chalker.colorize(`
 [q]Bot name: [y]@${info.botName}
 [q]App URL:  [y]${info.appUrl}
-[q]Port:     [y]${port}
 
 [g]Started!`)
   )
@@ -38,7 +36,7 @@ module.exports = async (robot: Hubot.Robot) => {
 function splash() {
   console.log(
     asciiArtChalker.colorize(`
-p__________        __    __________                    p.___b.___ 
+p__________        __    __________                     p.___b.___ 
 b\\______   \\ _____/  |_  \\____    /___________  ____   p|   b|   |
 w |    |  _//  _ \\   __\\   /     // __ \\_  __ \\/  _ \\  p|   b|   |
 p |    |   (  <_> )  |    /     /\\  ___/|  | \\(  <_> ) p|   b|   |
