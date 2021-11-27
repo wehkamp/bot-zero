@@ -50,6 +50,14 @@ You can also push to the original bot-zero project with `git push upstream whate
 **Dev**<br/>
 Start the bot with `npm run dev`. It will start a watcher that will inspect your typescript files. Whenever something is changed, the bot is restarted.
 
+**Docker**<br/>
+If you want to run in Docker, execute the following:
+
+```sh
+docker build -t bot-zero .
+docker run -e HUBOT_SLACK_TOKEN=xoxb-you-token-here -it bot-zero
+```
+
 **Packages** <br/>
 We've included some packages:
 
