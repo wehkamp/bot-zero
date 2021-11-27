@@ -15,13 +15,12 @@ import {
   NumberParameter,
 } from "hubot-command-mapper"
 import fetch from "node-fetch"
-import Hubot from "../Hubot"
 
 const idQuoteUrl = "https://api.icndb.com/jokes/"
 const randomQuoteUrl =
   "https://api.icndb.com/jokes/random?escape=javascript&exlude=[explicit]"
 
-module.exports = (robot: Hubot.Robot) => {
+module.exports = robot => {
   map_tool(robot, {
     name: "norris",
     commands: [

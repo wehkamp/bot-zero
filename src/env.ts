@@ -4,11 +4,20 @@ export function getConfig(envFile) {
   if (fs.existsSync(envFile)) {
     return fs
       .readFileSync(envFile, "utf-8")
-      .split("\n") // thanks Windows!
+      .split("\n")
       .filter(l => l && l.indexOf("=") !== -1 && l.indexOf("#") !== 0)
+      .concat([
+        `HUBOT_SLACK_RTM_CLIENT_OPTS='{"dataStore": false, "useRtmConnect": true }`,
+      ])
   }
 
-  return ["ENVIRONMENT=production", "INSTALLED_TEAM_ONLY=true", "HUBOT_HELP_DISABLE_HTTP=true", "HUBOT_LOG_LEVEL=error"]
+  return [
+    "ENVIRONMENT=production",
+    "INSTALLED_TEAM_ONLY=true",
+    "HUBOT_HELP_DISABLE_HTTP=true",
+    "HUBOT_LOG_LEVEL=error",
+    `HUBOT_SLACK_RTM_CLIENT_OPTS='{"dataStore": false, "useRtmConnect": true }`,
+  ]
 }
 
 export function validateToken(config) {
@@ -20,10 +29,17 @@ export function validateToken(config) {
   else token = process.env.HUBOT_SLACK_TOKEN
 
   if (!token || token.length === 0) {
-    console.log("\x1b[33mNo HUBOT_SLACK_TOKEN found.\x1b[0m Please add it to your environment variables (for production) or to your .env file (for local development).\n")
+    console.log(
+      "\x1b[33mNo HUBOT_SLACK_TOKEN found.\x1b[0m Please add it to your environment variables (for production) or to your .env file (for local development).\n"
+    )
     process.exit()
-  } else if (token.indexOf(tokenStart) !== 0 || token.length <= tokenStart.length) {
-    console.warn("\x1b[33mInvalid HUBOT_SLACK_TOKEN found.\x1b[0m Please check your environment variable (for production) or your .env file (for local development).\n")
+  } else if (
+    token.indexOf(tokenStart) !== 0 ||
+    token.length <= tokenStart.length
+  ) {
+    console.warn(
+      "\x1b[33mInvalid HUBOT_SLACK_TOKEN found.\x1b[0m Please check your environment variable (for production) or your .env file (for local development).\n"
+    )
     process.exit()
   }
 }

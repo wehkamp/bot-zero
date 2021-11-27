@@ -93,7 +93,7 @@ export function createUpdatableMessage(channel: string | IContext) {
 
   if ((<any>channel).res) {
     channelId = (<IContext>channel).res.message.room
-    thread_ts = (<IContext>channel).res.message.thread_ts
+    thread_ts = (<any>channel).res.message.thread_ts
   } else {
     channelId = <string>channel
   }

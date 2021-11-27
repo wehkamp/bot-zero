@@ -6,24 +6,23 @@
   "description": "An 'empty' Slack Bot that can be the jump start for your own bot. It is based on the Hubot project.",
   "dependencies": {
     "@slack/web-api": "^6.5.1",
+    "@types/hubot": "^3.3.1",
     "chalk-with-markers": "^1.0.24",
     "cross-env": "^7.0.3",
     "hubot": "^3.3.2",
-    "hubot-command-mapper": "^2.3.13",
+    "hubot-command-mapper": "^3.0.5",
     "hubot-help": "^1.0.1",
-    "hubot-slack": "^4.9.0",
-    "json-schema": ">=0.4.0",
+    "hubot-slack": "^4.5.1",
     "node-fetch": "^2.6.6",
-    "typescript": "^4.4.4"
+    "npm": "^8.1.4",
+    "npm-force-resolutions": "0.0.3"
   },
   "devDependencies": {
     "@types/node": "^16",
     "del-cli": "^3.0.1",
     "ts-node": "^10.4.0",
-    "ts-node-dev": "^1.1.8"
-  },
-  "engines": {
-    "node": "0.10.x"
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.4.4"
   },
   "scripts": {
     "start": "node ./dist/src/index.js",
@@ -42,5 +41,9 @@
   "bugs": {
     "url": "https://github.com/wehkamp/bot-zero/issues"
   },
-  "homepage": "https://github.com/wehkamp/bot-zero#readme"
+  "homepage": "https://github.com/wehkamp/bot-zero#readme",
+  "resolutions": {
+    "json-schema": "0.4.0",
+    "ansi-regex": "6.0.1"
+  }
 }
