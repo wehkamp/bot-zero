@@ -49,6 +49,13 @@ You can also push to the original bot-zero project with `git push upstream whate
 
 **Dev**<br/>
 Start the bot with `npm run dev`. It will start a watcher that will inspect your typescript files. Whenever something is changed, the bot is restarted.
+Add new scripts to the `src/scripts` directory. Every script have the following:
+
+```js
+module.exports = robot => {
+  // your code goes here
+}
+```
 
 **Docker**<br/>
 If you want to run in Docker, execute the following:
