@@ -1,32 +1,27 @@
-#build using the latest node container
-FROM node:latest AS buildstep
+FROM node:16-alpine AS buildstep
 
-# Copy in package.json, install
-# and build all node modules
 WORKDIR /bot-zero
 COPY package.json .
 COPY package-lock.json .
-RUN npm install --production
 
-# This is our runtime container that will end up
-# running on the device.
-FROM node:alpine
+RUN npm install
 
-# Set time zone on container
-RUN apk add tzdata
-ENV TZ=Europe/Amsterdam
+COPY src ./src
+COPY tsconfig.json .
+
+RUN npm run build
+
+
+FROM node:16-alpine
 
 WORKDIR /bot-zero
+COPY package.json .
+COPY package-lock.json .
 
-# Copy our node_modules into our deployable container context.
-COPY --from=buildstep /bot-zero/node_modules node_modules
+RUN npm ci --production
+
+COPY external-scripts.json ./dist/src/external-scripts.json
 COPY bin ./bin
-COPY package.json .
-COPY package-lock.json .
-COPY .env .
-COPY scripts ./scripts
-COPY index.js .
-COPY external-scripts.json .
+COPY --from=buildstep /bot-zero/dist ./dist
 
-# Launch our App.
 CMD ["npm", "start"]

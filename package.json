@@ -25,7 +25,7 @@
     "typescript": "^4.4.4"
   },
   "scripts": {
-    "start": "node ./dist/src/index.js",
+    "start": "node ./dist/index.js",
     "dev": "npm run clean --silent & ts-node-dev --tree-kill --respawn --watch '*.json,src/**/*.ts,*.env' --transpile-only src/index.ts",
     "audit-fix": "npm audit fix --force & npm install & npx npm-force-resolutions & npm install",
     "build": "tsc",
