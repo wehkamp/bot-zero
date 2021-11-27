@@ -46,7 +46,7 @@ export type Message =
   | ChatUpdateArguments
   | string
 
-export async function sendMessage(
+async function sendMessage(
   webClient: WebClient,
   msg: ChatPostMessageArguments | ChatUpdateArguments
 ) {
@@ -67,38 +67,42 @@ function isString(x: any): x is string {
 }
 
 export class UpdatableMessage {
-  private _message: Message
-  private _nextMessage: Message
-  private _sendingProm: Promise<void> | null
-  private _sending = false
+  private message?: Message
+  private nextMessage?: Message
+  private sending?: Promise<void>
+  private isSending = false
 
   constructor(
     private readonly webClient: WebClient,
     private channel: string,
-    private ts: string | null = null,
-    private readonly threadTs: string | null = null
+    private ts: string,
+    private readonly threadTs: string
   ) {}
 
   async wait(): Promise<string | null> {
-    if (this._sendingProm) {
-      await this._sendingProm
+    if (this.sending) {
+      await this.sending
+      await delay(500)
     }
 
-    return await delay(500, this.ts)
+    return this.ts
   }
 
   async send(msg: Message): Promise<void> {
     // don't send empty or the same message
-    if (!msg || msg === this._message) {
+    if (!msg || msg === this.message) {
       return
     }
 
     // when sending, add to later
-    if (this._sending) {
-      this._nextMessage = msg
-      await Promise.resolve(this._sendingProm)
+    if (this.isSending) {
+      this.nextMessage = msg
+      await Promise.resolve(this.sending)
       return
     }
+
+    // save orignal message for comparison
+    this.message = msg
 
     if (isString(msg)) {
       msg = {
@@ -106,10 +110,7 @@ export class UpdatableMessage {
       }
     }
 
-    // save orignal message for comparison
-    this._message = msg
-
-    // combine with fields for the new object
+    // combine with fields for the message update
     msg = {
       ...msg,
       ...{
@@ -120,18 +121,18 @@ export class UpdatableMessage {
       },
     }
 
-    this._sending = true
-    this._sendingProm = sendMessage(this.webClient, <any>msg).then(x => {
+    this.isSending = true
+    this.sending = sendMessage(this.webClient, <any>msg).then(x => {
       this.ts = this.ts || x.ts
       this.channel = this.channel || x.channel
-      this._sending = false
+      this.isSending = false
 
-      const msg = this._nextMessage
-      this._nextMessage = null
+      const msg = this.nextMessage
+      this.nextMessage = null
       return this.send(msg)
     })
 
-    await this._sendingProm
+    await this.sending
   }
 
   getTs() {
@@ -143,21 +144,24 @@ export class UpdatableMessage {
   }
 
   async delete() {
-    if (this._sendingProm) {
-      await this._sendingProm
-    }
+    // wait for last message to complete
+    let ts = await this.wait()
 
+    // reset any updates
+    this.ts = null
+
+    // delete this message
     await this.webClient.chat.delete({
-      ts: this.ts,
+      ts: ts,
       channel: this.channel,
     })
   }
 }
 
-export function delay<T>(ms: number, val: T = null): Promise<T> {
-  return new Promise<T>(r => {
+export function delay(ms: number): Promise<void> {
+  return new Promise(r => {
     setTimeout(() => {
-      r(val)
+      r()
     }, ms)
   })
 }
