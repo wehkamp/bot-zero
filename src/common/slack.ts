@@ -50,13 +50,13 @@ export interface ChatUpdateMessageWebAPICallResult extends WebAPICallResult {
   text: string
 }
 
-export type SimpleMessage = {
+export type BlockMessage = {
   text?: string
   blocks?: (KnownBlock | Block)[]
 }
 
 type SendableMessage =
-  | SimpleMessage
+  | BlockMessage
   | ChatPostMessageArguments
   | ChatUpdateArguments
   | string
@@ -252,7 +252,7 @@ export class UpdatableMessage {
   }
 }
 
-export function delay<T>(ms: number, val: T): Promise<T> {
+export function delay<T>(ms: number, val: T = null): Promise<T> {
   return new Promise<T>(r => {
     setTimeout(() => {
       r(val)

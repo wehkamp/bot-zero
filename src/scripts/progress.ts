@@ -9,7 +9,7 @@
 "strict"
 
 import { map_command } from "hubot-command-mapper"
-import { createUpdatableMessage, SimpleMessage } from "../common/slack"
+import { createUpdatableMessage, delay, BlockMessage } from "../common/slack"
 
 const steps = [
   "Preparing environment...",
@@ -26,7 +26,7 @@ const steps = [
 ]
 
 module.exports = robot => {
-  map_command(robot, "progress", context => {
+  map_command(robot, "progress", async context => {
     // the channel is needed for interaction by the Slack
     // API - this works also for private messages to the bot
     const msg = createUpdatableMessage(context)
@@ -39,14 +39,9 @@ module.exports = robot => {
     const ms = 750
 
     let i = 1
-    const x = setInterval(() => {
-      if (i > 100) {
-        i = 100
-        clearInterval(x)
-      }
-
+    while (true) {
       const step = Math.floor(i / (steps.length - 1))
-      const message: SimpleMessage = {
+      const message: BlockMessage = {
         blocks: [
           {
             type: "section",
@@ -62,6 +57,12 @@ module.exports = robot => {
       msg.send(message)
 
       i += 3
-    }, ms)
+
+      if (i > 100) {
+        i = 100
+        break
+      }
+      await delay(ms)
+    }
   })
 }
