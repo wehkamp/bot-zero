@@ -3,21 +3,8 @@ import fs from "fs"
 import { spawn } from "child_process"
 import { chalker } from "chalk-with-markers"
 
-// load config for .env file - they are optional
-const config = getConfig("./.env")
-
-// will exit with error message when invalid!
-validateToken(config)
-
-// convert config into Hubot start
-const params = convertConfigIntoParameters(config)
-params.push("hubot")
-params.push("--adapter")
-params.push("slack")
-params.push("--disable-httpd")
-
-function startHubot() {
-  // dist directory must be available
+function startHubot(params: string[]) {
+  // dist directory must be available, it is after building
   if (params.indexOf("ENVIRONMENT=local") != -1) {
     fs.copyFileSync("./external-scripts.json", "./dist/external-scripts.json")
   }
@@ -33,6 +20,22 @@ function startHubot() {
   require("cross-env")(params)
 }
 
+// load config for .env file - they are optional
+const config = getConfig("./.env")
+
+// will exit with error message when invalid!
+validateToken(config)
+
+// convert config into Hubot start
+const params = convertConfigIntoParameters(config)
+params.push("hubot")
+params.push("--adapter")
+params.push("slack")
+params.push("--disable-httpd")
+
+// if we are started by ts-node-dev, we need to
+// do a build first, so we have a filled scripts
+// directory for Hubot
 if (process.env.TS_NODE_DEV) {
   console.log()
   console.log(chalker.colorize("[p]Compiling..."))
@@ -40,8 +43,8 @@ if (process.env.TS_NODE_DEV) {
   let npm = /^win/.test(process.platform) ? "npm.cmd" : "npm"
   spawn(npm, ["run", "build", "--silent"], { stdio: "inherit" }).on(
     "close",
-    () => startHubot()
+    () => startHubot(params)
   )
 } else {
-  startHubot()
+  startHubot(params)
 }
