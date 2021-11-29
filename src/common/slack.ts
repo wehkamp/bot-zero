@@ -1,4 +1,4 @@
-import { WebClient } from "@slack/web-api"
+import { FilesUploadArguments, WebClient } from "@slack/web-api"
 import { SlackAdapters } from "./types"
 
 export function start(token: string) {
@@ -29,18 +29,25 @@ export function upload(
   comment: string,
   fileName: string,
   channel: string,
-  buffer: Buffer,
+  data: Buffer | string,
   thread_ts: string = null,
   filetype = "jpg",
   token: string = null
 ) {
-  return createWebClient(token).files.upload({
+  let options: FilesUploadArguments = {
     filename: fileName,
-    file: buffer,
     channels: channel,
     filetype: filetype,
     initial_comment: comment,
     title: fileName,
     thread_ts: thread_ts,
-  })
+  }
+
+  if (data instanceof Buffer) {
+    options.file = data
+  } else {
+    options.content = data
+  }
+
+  return createWebClient(token).files.upload(options)
 }
