@@ -6,7 +6,6 @@
   "description": "An 'empty' Slack Bot that can be the jump start for your own bot. It is based on the Hubot project.",
   "dependencies": {
     "@slack/web-api": "^6.5.1",
-    "@types/hubot": "^3.3.1",
     "chalk-with-markers": "^1.0.24",
     "cross-env": "^7.0.3",
     "hubot": "^3.3.2",
@@ -14,10 +13,10 @@
     "hubot-help": "^1.0.1",
     "hubot-slack": "^4.5.1",
     "node-fetch": "^2.6.6",
-    "npm": "^8.1.4",
     "npm-force-resolutions": "0.0.3"
   },
   "devDependencies": {
+    "@types/hubot": "^3.3.1",
     "@types/node": "^16.11.10",
     "del-cli": "^3.0.1",
     "ts-node": "^10.4.0",
