@@ -2,22 +2,25 @@ import fs from "fs"
 import { chalker } from "chalk-with-markers"
 
 export function getConfig(envFilePath: string) {
+  let defaultOptions = [
+    "INSTALLED_TEAM_ONLY=true",
+    "HUBOT_HELP_DISABLE_HTTP=true",
+    `HUBOT_SLACK_RTM_CLIENT_OPTS='{"dataStore": false, "useRtmConnect": true }`,
+  ]
+
+  if (process.env.TS_NODE_DEV) {
+    defaultOptions.push("ENVIRONMENT=local")
+  }
+
   if (fs.existsSync(envFilePath)) {
     return fs
       .readFileSync(envFilePath, "utf-8")
       .split("\n")
       .filter(l => l && l.indexOf("=") !== -1 && l.indexOf("#") !== 0)
-      .concat([
-        `HUBOT_SLACK_RTM_CLIENT_OPTS='{"dataStore": false, "useRtmConnect": true }`,
-      ])
+      .concat(defaultOptions)
   }
 
-  return [
-    "INSTALLED_TEAM_ONLY=true",
-    "HUBOT_HELP_DISABLE_HTTP=true",
-    "HUBOT_LOG_LEVEL=error",
-    `HUBOT_SLACK_RTM_CLIENT_OPTS='{"dataStore": false, "useRtmConnect": true }`,
-  ]
+  return ["HUBOT_LOG_LEVEL=error"].concat(defaultOptions)
 }
 
 function errorAndExit(problem: string, details: string) {
@@ -36,9 +39,7 @@ export function validateToken(config: string[]) {
       .map(x => x.split("="))
       .filter(x => x[0] == "HUBOT_SLACK_TOKEN")
       .map(x => x[1].trim())
-      .find(Boolean) ||
-    process.env.HUBOT_SLACK_TOKEN ||
-    ""
+      .find(Boolean) || process.env.HUBOT_SLACK_TOKEN
 
   if (token.startsWith('"') && token.endsWith('"')) {
     token = token.substr(1, token.length - 2)
