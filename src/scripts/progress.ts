@@ -9,11 +9,7 @@
 "strict"
 
 import { map_command } from "hubot-command-mapper"
-import {
-  BlockMessage,
-  createUpdatableMessage,
-  delay,
-} from "../common/UpdatableMessage"
+import { createUpdatableMessage, delay } from "../common/UpdatableMessage"
 
 const steps = [
   "Preparing environment...",

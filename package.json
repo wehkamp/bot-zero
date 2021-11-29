@@ -13,11 +13,13 @@
     "hubot-help": "^1.0.1",
     "hubot-slack": "^4.5.1",
     "node-fetch": "^2.6.6",
-    "npm-force-resolutions": "0.0.3"
+    "npm-force-resolutions": "0.0.3",
+    "remove-markdown": "^0.3.0"
   },
   "devDependencies": {
     "@types/hubot": "^3.3.1",
     "@types/node": "^16.11.10",
+    "@types/remove-markdown": "^0.3.1",
     "del-cli": "^3.0.1",
     "ts-node": "^10.4.0",
     "ts-node-dev": "^1.1.8",
@@ -26,7 +28,7 @@
   "scripts": {
     "start": "node ./dist/index.js",
     "dev": "npm run clean --silent & ts-node-dev --tree-kill --respawn --watch '*.json,src/**/*.ts,*.env' --transpile-only src/index.ts",
-    "audit-fix": "npm audit fix --force & npm install & npx npm-force-resolutions & npm install",
+    "patch": "npx npm-force-resolutions & npm audit",
     "build": "tsc",
     "clean": "del-cli dist",
     "test": "echo \"Bot Zero II has no tests...\" & exit 0"

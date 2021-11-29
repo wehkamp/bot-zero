@@ -1,22 +1,5 @@
-import { WebClient, WebAPICallResult } from "@slack/web-api"
-
-export type ChannelWebAPICallResult = WebAPICallResult & {
-  channel: {
-    name: string
-  }
-}
-
-type SlackAdapters = {
-  web: WebClient
-  getBotInfo(): Promise<BotInfo>
-}
-
-type BotInfo = {
-  botId: string
-  botName: string
-  appId: string
-  appUrl: string
-}
+import { WebClient } from "@slack/web-api"
+import { SlackAdapters } from "./types"
 
 export function start(token: string) {
   return <SlackAdapters>{
