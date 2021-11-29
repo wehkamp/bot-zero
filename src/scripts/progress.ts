@@ -45,20 +45,7 @@ module.exports = robot => {
     let i = 1
     while (true) {
       const step = Math.floor(i / (steps.length - 1))
-      const message: BlockMessage = {
-        blocks: [
-          {
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: `${steps[step]} *${i}*%`,
-            },
-          },
-        ],
-        text: `${steps[step]} ${i}%`,
-      }
-
-      msg.send(message)
+      msg.send(`${steps[step]} *${i}*%`)
 
       i += 3
 
