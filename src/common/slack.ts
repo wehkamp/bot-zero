@@ -47,8 +47,8 @@ export function upload(
   fileName: string,
   channel: string,
   buffer: Buffer,
-  thread_ts: string,
-  filetype: "jpg",
+  thread_ts: string = null,
+  filetype = "jpg",
   token: string = null
 ) {
   return createWebClient(token).files.upload({
