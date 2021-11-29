@@ -106,6 +106,15 @@ export class UpdatableMessage {
 
     if (isString(msg)) {
       msg = {
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: msg,
+            },
+          },
+        ],
         text: msg,
       }
     }
