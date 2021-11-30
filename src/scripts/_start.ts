@@ -4,6 +4,7 @@
 // Author:
 //  KeesCBakker
 
+import "source-map-support/register"
 import { start } from "../common/slack"
 import { asciiArtChalker, chalker } from "chalk-with-markers"
 import {
