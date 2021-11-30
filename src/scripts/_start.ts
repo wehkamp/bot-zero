@@ -37,7 +37,7 @@ module.exports = async (robot: Hubot.Robot) => {
 function splash() {
   console.log(
     asciiArtChalker.colorize(`
-ppp__________        __    __________                    ppppp.___b.___ 
+ppp__________        __    __________                    ppppp ___b ___ 
 b\\______   \\ _____/  |_  \\____    /___________  bbb____   p|   b|   |
 ww |    |  _//  _ \\   __\\   /     // __ \\_  __ \\/  _ \\  p|   b|   |
 pp |    |   (  <_> )  |    pp/     /p\\  ___/|  | \\(  <_> ) p|   b|   |
