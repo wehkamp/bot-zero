@@ -12,7 +12,7 @@
     "hubot-command-mapper": "^3.0.5",
     "hubot-help": "^1.0.1",
     "hubot-slack": "^4.5.1",
-    "node-fetch": "^2.6.6",
+    "node-fetch": "^3.1.1",
     "npm-force-resolutions": "0.0.3",
     "remove-markdown": "^0.3.0",
     "source-map-support": "^0.5.21"
