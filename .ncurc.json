@@ -1,0 +1,7 @@
+{
+    "upgrade": true,
+    "reject": [
+      "del-cli",
+      "node-fetch"
+    ]
+  }
