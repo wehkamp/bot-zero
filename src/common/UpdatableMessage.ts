@@ -1,21 +1,10 @@
-import {
-  ChatPostMessageArguments,
-  ChatUpdateArguments,
-  WebClient,
-} from "@slack/web-api"
+import { ChatPostMessageArguments, ChatUpdateArguments, WebClient } from "@slack/web-api"
 import { IContext } from "hubot-command-mapper"
 import { createWebClient } from "./slack"
 import removeMarkDown from "remove-markdown"
-import {
-  ChatPostMessageWebAPICallResult,
-  ChatUpdateMessageWebAPICallResult,
-  Message,
-} from "./types"
+import { ChatPostMessageWebAPICallResult, ChatUpdateMessageWebAPICallResult, Message } from "./types"
 
-async function sendMessage(
-  webClient: WebClient,
-  msg: ChatPostMessageArguments | ChatUpdateArguments
-) {
+async function sendMessage(webClient: WebClient, msg: ChatPostMessageArguments | ChatUpdateArguments) {
   if (msg.ts) {
     let args = msg as ChatUpdateArguments
     let result = await webClient.chat.update(args)

@@ -31,8 +31,7 @@ function errorAndExit(problem: string, details: string) {
 }
 
 export function validateToken(config: string[]) {
-  const envMsg =
-    "your environment variables (for production) or to your .env file (for local development)."
+  const envMsg = "your environment variables (for production) or to your .env file (for local development)."
 
   let token =
     config
@@ -50,17 +49,11 @@ export function validateToken(config: string[]) {
   }
 
   if (token.length < 10) {
-    errorAndExit(
-      "Invalid HUBOT_SLACK_TOKEN.",
-      "Please add the whole token to" + envMsg
-    )
+    errorAndExit("Invalid HUBOT_SLACK_TOKEN.", "Please add the whole token to" + envMsg)
   }
   const tokenStart = "xoxb-"
   if (!token.startsWith(tokenStart)) {
-    errorAndExit(
-      "Invalid HUBOT_SLACK_TOKEN type.",
-      "Please add the 'xoxb-' token to" + envMsg
-    )
+    errorAndExit("Invalid HUBOT_SLACK_TOKEN type.", "Please add the 'xoxb-' token to" + envMsg)
   }
 
   return token

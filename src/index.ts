@@ -1,8 +1,4 @@
-import {
-  getConfig,
-  validateToken,
-  convertConfigIntoCrossEnvParameters,
-} from "./env"
+import { getConfig, validateToken, convertConfigIntoCrossEnvParameters } from "./env"
 import fs from "fs"
 import { spawn } from "child_process"
 import { chalker } from "chalk-with-markers"
@@ -12,16 +8,13 @@ function compileAndStart(params: string[]) {
   console.log(chalker.colorize("[p]Compiling..."))
 
   let npm = /^win/.test(process.platform) ? "npm.cmd" : "npm"
-  spawn(npm, ["run", "build", "--silent"], { stdio: "inherit" }).on(
-    "close",
-    code => {
-      if (code != 0) {
-        process.exit(-1)
-      }
-
-      start(params)
+  spawn(npm, ["run", "build", "--silent"], { stdio: "inherit" }).on("close", code => {
+    if (code != 0) {
+      process.exit(-1)
     }
-  )
+
+    start(params)
+  })
 }
 
 function start(params: string[]) {

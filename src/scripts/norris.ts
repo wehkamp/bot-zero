@@ -9,16 +9,11 @@
 // Author:
 //  KeesCBakker (kbakker@wehkamp.nl)
 
-import {
-  map_tool,
-  StringParameter,
-  NumberParameter,
-} from "hubot-command-mapper"
+import { map_tool, StringParameter, NumberParameter } from "hubot-command-mapper"
 import fetch from "node-fetch"
 
-const idQuoteUrl = "https://api.icndb.com/jokes/"
-const randomQuoteUrl =
-  "https://api.icndb.com/jokes/random?escape=javascript&exlude=[explicit]"
+const idQuoteUrl = "http://api.icndb.com/jokes/"
+const randomQuoteUrl = "http://api.icndb.com/jokes/random?escape=javascript&exlude=[explicit]"
 
 module.exports = robot => {
   map_tool(robot, {
@@ -32,9 +27,7 @@ module.exports = robot => {
             let joke = await getJoke(randomQuoteUrl)
             context.res.reply(joke)
           } catch (err) {
-            context.res.reply(
-              "Not even Chuck Norris can deal with this one: " + err
-            )
+            context.res.reply("Not even Chuck Norris can deal with this one: " + err)
           }
         },
       },
@@ -54,10 +47,7 @@ module.exports = robot => {
       },
       {
         name: "impersonate",
-        parameters: [
-          new StringParameter("firstName"),
-          new StringParameter("lastName"),
-        ],
+        parameters: [new StringParameter("firstName"), new StringParameter("lastName")],
         execute: async context => {
           const firstName = encodeURIComponent(context.values.firstName)
           const lastName = encodeURIComponent(context.values.lastName)
@@ -67,9 +57,7 @@ module.exports = robot => {
             let joke = await getJoke(url)
             context.res.reply(joke)
           } catch (err) {
-            context.res.reply(
-              "Not even Chuck Norris can deal with this one: " + err
-            )
+            context.res.reply("Not even Chuck Norris can deal with this one: " + err)
           }
         },
       },
@@ -79,7 +67,7 @@ module.exports = robot => {
 
 async function getJoke(url: string) {
   let response = await fetch(url)
-  let json = await response.json()
+  let json: any = await response.json()
 
   if (json.value.joke) {
     return json.value.joke as string

@@ -38,11 +38,7 @@ type BlockMessage = {
   blocks?: (KnownBlock | Block)[]
 }
 
-type Message =
-  | BlockMessage
-  | ChatPostMessageArguments
-  | ChatUpdateArguments
-  | string
+type Message = BlockMessage | ChatPostMessageArguments | ChatUpdateArguments | string
 
 type ChannelWebAPICallResult = WebAPICallResult & {
   channel: {
