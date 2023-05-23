@@ -7,18 +7,35 @@
 
 Blog: https://medium.com/wehkamp-techblog/jump-starting-slack-bot-projects-bot-zero-991b9654585e
 
+WHATEVER YOU DO... NEVER (!!) LISTEN TO THIS ON SLACK!
+
+> Slack has improved how we handle permissions for apps, so you can now request only the specific scopes your app needs. We recommend updating your app’s scopes.
+
+YOU'LL END UP WRECKING YOUR SETUP.
+
 ## Getting started
 
 Starting this project is really easy:
 
-1. Fork this project (top right corner)
-2. Clone your forked project to your pc.
-3. Goto http://slackapi.github.io/hubot-slack/#getting-a-slack-token to read up on how to get a Slack token for your bot.
-4. Copy .env.example to .env and add the Slack token to this file.
-5. Open a terminal and navigate to your bot directory.
-6. Enter `npm install` to install the NodeJs packages.
-7. Start the bot using `npm run dev`.
-8. Enjoy!
+1. Clone the project.
+1. Goto https://api.slack.com/rtm#classic and click the Create a classic Slack app button.
+1. Complete: Settings > Basic Information > Display Information Section.
+1. Add legacy user: Features > App Home > First, add a legacy bot user > Add Legacy Bot User
+1. Install: Settings > Install App > Install to Workspace, install the app and copy the `xoxb-` Slack token. (You might need an admin to approve.)
+1. Copy `.example.env` to `.env` and add the Slack token to this file.
+1. Open a terminal and navigate to your bot directory.
+1. Enter `npm install` to install the NodeJs packages.
+1. Start the bot using `npm run dev`.
+1. Enjoy!
+
+If you want to do Docker:
+
+1. Clone the project.
+1. Goto https://api.slack.com/rtm#classic
+1. Complete the Basic Information > Display Information Section
+1. Goto Install App, install the app and copy the `xoxb-` Slack token.
+1. Copy `.example.env` to `.env` and add the Slack token to this file.
+1. Start `docker-compose up --build` and it will use the `.env` file to run the bot.
 
 ## How to fork this project internally in wehkamp
 
