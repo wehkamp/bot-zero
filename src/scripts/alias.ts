@@ -1,6 +1,6 @@
 import { alias } from "hubot-command-mapper"
 
-/* aliasses can be added to this table. It proveds an
+/* aliases can be added to this table. It provides an
  * easy way to map complex commands with lots of parameters
  * into simple versions.
  */
