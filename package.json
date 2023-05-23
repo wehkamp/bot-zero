@@ -9,7 +9,7 @@
     "chalk-with-markers": "^1.0.24",
     "cross-env": "^7.0.3",
     "hubot": "^3.3.2",
-    "hubot-command-mapper": "^4.0.1",
+    "hubot-command-mapper": "^4.0.5",
     "hubot-help": "^1.0.1",
     "hubot-slack": "^4.10.0",
     "node-fetch": "^2.6.7",

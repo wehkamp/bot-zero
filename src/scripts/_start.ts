@@ -10,16 +10,16 @@ import { start } from "../common/slack"
 import "source-map-support/register"
 
 import {
-  removeTrailingWhitespaceCharactersFromIncommingMessages,
-  removeTrailingBotWhitespaceCharactersFromIncommingMessages,
+  removeTrailingWhitespaceCharactersFromIncomingMessages,
+  removeTrailingBotWhitespaceCharactersFromIncomingMessages,
 } from "hubot-command-mapper"
 import Hubot from "hubot"
 
 module.exports = async (robot: Hubot.Robot) => {
   // make sure command mapper behaves
   removeMarkdownFromInput(robot)
-  removeTrailingWhitespaceCharactersFromIncommingMessages(robot)
-  removeTrailingBotWhitespaceCharactersFromIncommingMessages(robot)
+  removeTrailingWhitespaceCharactersFromIncomingMessages(robot)
+  removeTrailingBotWhitespaceCharactersFromIncomingMessages(robot)
 
   // setup adapters
   const adapters = start(process.env.HUBOT_SLACK_TOKEN)
