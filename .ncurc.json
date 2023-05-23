@@ -1,7 +1,4 @@
 {
-    "upgrade": true,
-    "reject": [
-      "del-cli",
-      "node-fetch"
-    ]
-  }
+  "upgrade": true,
+  "reject": ["del-cli", "node-fetch", "hubot", "@types/hubot"]
+}
