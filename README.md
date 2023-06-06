@@ -95,7 +95,7 @@ The bot was generated using the <a href="http://slackapi.github.io/hubot-slack/"
 
 We're using the following stack:
 
-- [x] NodeJs
+- [x] Node.js
 - [x] TypeScript
 - [x] Hubot
 - [x] NPM
