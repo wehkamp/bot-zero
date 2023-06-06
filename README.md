@@ -6,11 +6,11 @@
 
 Blog: https://medium.com/wehkamp-techblog/jump-starting-slack-bot-projects-bot-zero-991b9654585e
 
-**WHATEVER YOU DO... NEVER (!!) LISTEN TO THIS ON SLACK!**
+**⚠️ WHATEVER YOU DO... NEVER (!!) LISTEN TO THIS ON SLACK! ⚠️**
 
 > Slack has improved how we handle permissions for apps, so you can now request only the specific scopes your app needs. We recommend updating your app’s scopes.
 
-**YOU'LL END UP WRECKING YOUR SETUP.**
+**⚠️ YOU'LL END UP WRECKING YOUR SETUP. ⚠️**
 
 ## Getting started
 
