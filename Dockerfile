@@ -12,7 +12,7 @@ COPY tsconfig.json .
 RUN npm run build
 
 
-FROM node:18-alpine
+FROM node:18-alpine AS runtime
 
 WORKDIR /bot-zero
 COPY package.json .
