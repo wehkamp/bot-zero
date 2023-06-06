@@ -26,9 +26,13 @@ This project supports dev containers, so you don't have to install nodejs to you
 1. Start the bot using `npm run dev`.
 1. Enjoy!
 
-## How to fork this project internally in wehkamp
+Note: if you're using Ranger Desktop, you might encounter a mount error.
+Please consult: https://github.com/microsoft/vscode-remote-release/issues/8172
+It advises to downgrade `Dev Containers` to `0.266.1`.
 
-GitHub doesn't allow forks on the same organization which means you can't use the fork button for wehkamp use. You can easily solve this by forking this manually.
+## How to fork this project internally in Wehkamp
+
+GitHub doesn't allow forks on the same organization which means you can't use the fork button for Wehkamp use. You can easily solve this by forking this manually.
 
 Replace bot-zero-fork with your own repo and/or use https for cloning/remotes instead of ssh.
 
