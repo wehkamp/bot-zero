@@ -82,6 +82,12 @@ docker build -t bot-zero .
 docker run -e HUBOT_SLACK_TOKEN=xoxb-you-token-here -it bot-zero
 ```
 
+Or, if you already have a `.env`, run Docker Compose:
+
+```sh
+docker-compose up --remove-orphans
+```
+
 **Packages** <br/>
 We've included some packages:
 
