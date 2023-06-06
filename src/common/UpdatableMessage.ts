@@ -24,7 +24,7 @@ function isString(x: any): x is string {
 export class UpdatableMessage {
   private message?: Message
   private nextMessage?: Message
-  private sending?: Promise<void>
+  private sending?: Promise<string>
   private isSending = false
 
   constructor(
@@ -34,7 +34,7 @@ export class UpdatableMessage {
     private readonly threadTs: string
   ) {}
 
-  async wait(): Promise<string | null> {
+  async waitForAllToBenSent(): Promise<string | null> {
     if (this.sending) {
       await this.sending
       await delay(500)
@@ -43,34 +43,40 @@ export class UpdatableMessage {
     return this.ts
   }
 
-  async send(msg: Message): Promise<void> {
+  async send(msg: Message): Promise<string> {
     // don't send empty or the same message
     if (!msg || msg === this.message) {
-      return
+      return this.getTs()
     }
 
     // when sending, add to later
     if (this.isSending) {
       this.nextMessage = msg
       await Promise.resolve(this.sending)
-      return
+      return this.getTs()
     }
 
-    // save orignal message for comparison
+    // save original message for comparison
     this.message = msg
 
     if (isString(msg)) {
-      msg = {
-        blocks: [
-          {
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: msg,
+      if (msg.length >= 3000) {
+        msg = {
+          text: msg,
+        }
+      } else {
+        msg = {
+          blocks: [
+            {
+              type: "section",
+              text: {
+                type: "mrkdwn",
+                text: msg,
+              },
             },
-          },
-        ],
-        text: removeMarkDown(msg),
+          ],
+          text: removeMarkDown(msg),
+        }
       }
     }
 
@@ -85,6 +91,11 @@ export class UpdatableMessage {
       },
     }
 
+    // clear blocks from previous message is we have to
+    if (!msg.blocks) {
+      msg.blocks = []
+    }
+
     this.isSending = true
     this.sending = sendMessage(this.webClient, <any>msg).then(x => {
       this.ts = this.ts || x.ts
@@ -96,7 +107,7 @@ export class UpdatableMessage {
       return this.send(msg)
     })
 
-    await this.sending
+    return await this.sending
   }
 
   getTs() {
@@ -109,7 +120,7 @@ export class UpdatableMessage {
 
   async delete() {
     // wait for last message to complete
-    let ts = await this.wait()
+    let ts = await this.waitForAllToBenSent()
 
     // reset any updates
     this.ts = null
@@ -130,7 +141,7 @@ export function delay(ms: number): Promise<void> {
   })
 }
 
-export function createUpdatableMessage(channel: string | IContext) {
+export function createUpdatableMessage(channel: string | IContext, initialMessage: Message = null) {
   let channelId = ""
   let thread_ts = null
 
@@ -141,5 +152,9 @@ export function createUpdatableMessage(channel: string | IContext) {
     thread_ts = (<any>channel).res.message.thread_ts
   }
 
-  return new UpdatableMessage(createWebClient(), channelId, null, thread_ts)
+  let msg = new UpdatableMessage(createWebClient(), channelId, null, thread_ts)
+  if (initialMessage) {
+    msg.send(initialMessage)
+  }
+  return msg
 }
