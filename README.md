@@ -2,7 +2,6 @@
 
 <a href="https://hubot.github.com/">Hubot</a> is a fantastic project that enabled us to build great bots. The **bot-zero** project aims to give you a cleaned up version with some examples that run on TypeScript (instead of Coffee-script).
 
-[![Build Status](https://travis-ci.org/wehkamp/bot-zero.svg?branch=master)](https://travis-ci.org/wehkamp/bot-zero)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/wehkamp/bot-zero/blob/master/LICENSE.md)
 
 Blog: https://medium.com/wehkamp-techblog/jump-starting-slack-bot-projects-bot-zero-991b9654585e
