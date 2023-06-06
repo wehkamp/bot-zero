@@ -1,4 +1,4 @@
-FROM node:16-alpine AS buildstep
+FROM node:18-alpine AS buildstep
 
 WORKDIR /bot-zero
 COPY package.json .
@@ -12,7 +12,7 @@ COPY tsconfig.json .
 RUN npm run build
 
 
-FROM node:16-alpine
+FROM node:18-alpine
 
 WORKDIR /bot-zero
 COPY package.json .
