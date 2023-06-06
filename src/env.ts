@@ -40,7 +40,7 @@ export function validateToken(config: string[]) {
       .map(x => x[1].trim())
       .find(Boolean) || process.env.HUBOT_SLACK_TOKEN
 
-  if (token.startsWith('"') && token.endsWith('"')) {
+  if (token && token.startsWith('"') && token.endsWith('"')) {
     token = token.substr(1, token.length - 2)
   }
 
