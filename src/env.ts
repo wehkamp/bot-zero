@@ -31,7 +31,7 @@ function errorAndExit(problem: string, details: string) {
 }
 
 export function validateToken(config: string[]) {
-  const envMsg = "your environment variables (for production) or to your .env file (for local development)."
+  const envMsg = "your environment variables (for production) or to your .env file (for local development). You can find your Slack apps here: https://api.slack.com/apps"
 
   let token =
     config
