@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# trust the repo
+git config --global --add safe.directory "$PWD"
+
 # config local GPG for signing
 git config --global gpg.program gpg 
 
