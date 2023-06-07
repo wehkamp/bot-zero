@@ -49,11 +49,11 @@ export function validateToken(config: string[]) {
   }
 
   if (token.length < 10) {
-    errorAndExit("Invalid HUBOT_SLACK_TOKEN.", "Please add the whole token to" + envMsg)
+    errorAndExit("Invalid HUBOT_SLACK_TOKEN.", "Please add the whole token to " + envMsg)
   }
   const tokenStart = "xoxb-"
   if (!token.startsWith(tokenStart)) {
-    errorAndExit("Invalid HUBOT_SLACK_TOKEN type.", "Please add the 'xoxb-' token to" + envMsg)
+    errorAndExit("Invalid HUBOT_SLACK_TOKEN type.", "Please add the 'xoxb-' token to " + envMsg)
   }
 
   return token
