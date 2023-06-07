@@ -2,9 +2,12 @@
 # Start with the same base image
 FROM mcr.microsoft.com/devcontainers/javascript-node:0-18-bullseye
 
-# Install the npm packages globally
-RUN npm install -g npm@9.6.7 \
-    && npm install -g npm-check-updates
+# Upgrade NPM
+RUN npm install -g npm@9.6.7
+
+# Install global packages
+RUN npm install --no-audit --no-fund --global \
+    npm-check-updates
 
 COPY ./config.sh /
 RUN chmod +x /config.sh
