@@ -16,6 +16,6 @@
 			]
 		}
 	},
-	"postStartCommand": "/config.sh",
+	"postStartCommand": "/startup.sh",
 	"postAttachCommand": "bash"
 }
