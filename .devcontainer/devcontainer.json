@@ -16,5 +16,6 @@
 			]
 		}
 	},
-	"postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder} && git config --global gpg.program gpg"
+	"postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder} && /config.sh",
+	"postAttachCommand": "bash"
 }
