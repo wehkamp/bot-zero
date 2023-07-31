@@ -8,13 +8,75 @@ Blog: https://medium.com/wehkamp-techblog/jump-starting-slack-bot-projects-bot-z
 
 ## Getting started
 
+In this secion we will create the Slack app and add the
+details to your `.env` file.
+
+1. Goto https://api.slack.com/apps?new_app=1
+2. Click _From an app manifest_
+3. Select your _Workspace_ and click _Next_
+4. Click _YAML_, paste this code in the field and click _Next_
+
+```yml
+display_information:
+  name: BotZero
+  description: A friendly Slack bot using Bolt and Hubot.
+  background_color: "#3d001d"
+features:
+  app_home:
+    home_tab_enabled: false
+    messages_tab_enabled: true
+    messages_tab_read_only_enabled: false
+  bot_user:
+    display_name: BotZero
+    always_online: true
+oauth_config:
+  scopes:
+    bot:
+      - app_mentions:read
+      - channels:join
+      - channels:history
+      - chat:write
+      - im:write
+      - im:history
+      - users:read
+      - groups:history
+      - groups:write
+      - mpim:history
+      - mpim:write
+settings:
+  event_subscriptions:
+    bot_events:
+      - app_mention
+      - message.channels
+      - message.im
+      - message.groups
+      - message.mpim
+  interactivity:
+    is_enabled: true
+  org_deploy_enabled: false
+  socket_mode_enabled: true
+  token_rotation_enabled: false
+```
+
+5. Click _Create_
+6. Click _Install to Workspace_
+7. Click _Allow_
+8. In the _Settings > Basic Information_ screen, scroll down to _App-Level Tokens_ and click _Generate Token and Scopes_
+9. Enter a _Token Name_: bot-zero
+10. Click _Add scope_
+11. Select _connections:write_
+12. Click the _Generate_ button
+13. Copy the `.example.env` in the root of your project to `.env`
+14. Copy the _Token_ and paste it in your `.env` file at `HUBOT_SLACK_APP_TOKEN`
+15. Click the _Done_ button
+16. Goto _Settings > Install App_
+17. Copy `Bot User OAuth Token` and paste it in your `.env` file at `HUBOT_SLACK_BOT_TOKEN`
+
+## Running the project
+
 This project supports dev containers, so you don't have to install nodejs to your environment.
 
-1. Goto https://api.slack.com/rtm#classic and click the Create a classic Slack app button.
-1. Complete: Settings > Basic Information > Display Information Section.
-1. Add legacy user: Features > App Home > First, add a legacy bot user > Add Legacy Bot User
-1. Install: Settings > Install App > Install to Workspace, install the app and copy the `xoxb-` Slack token. (You might need an admin to approve.)
-1. Copy `.example.env` to `.env` and add the Slack token to this file.
+1. Make sure your `.env` file has the right tokens.
 1. Open a terminal and navigate to your bot directory (dev container opens in the right directory).
 1. Enter `npm install` to install the NodeJs packages.
 1. Start the bot using `npm run dev`.
@@ -55,8 +117,10 @@ You can also push to the original bot-zero project with `git push upstream whate
 Start the bot with `npm run dev`. It will start a watcher that will inspect your typescript files. Whenever something is changed, the bot is restarted.
 Add new scripts to the `src/scripts` directory. Every script have the following:
 
-```js
-module.exports = robot => {
+```ts
+import { BotZero } from "../common/BotZero"
+
+module.exports = (robot: BotZero) => {
   // your code goes here
 }
 ```
@@ -75,16 +139,6 @@ Or, if you already have a `.env`, run Docker Compose:
 docker-compose up --build --remove-orphans
 ```
 
-**Packages** <br/>
-We've included some packages:
-
-- `node-fetch`: a modern HTTP client. Makes it easier to use promises of your HTTP requests.
-- `cross-env`: allows you to store environment variables in the .env file in the root of the project.
-- `hubot-command-mapper`: allows for the mapping of commands with parameters to the Hubot without the need for regular expressions.
-
-**Clean up**<br/>
-The bot was generated using the <a href="http://slackapi.github.io/hubot-slack/">Slack Developer Kit for Hubot</a>. It was "cleaned" using a script from <a href="https://keestalkstech.com/2018/04/cleaning-up-the-default-hubot-installation/">Cleaning up the Default Hubot Installation</a>.
-
 ## Tech
 
 We're using the following stack:
@@ -92,4 +146,5 @@ We're using the following stack:
 - [x] Node.js
 - [x] TypeScript
 - [x] Hubot
+- [x] Bolt
 - [x] NPM
