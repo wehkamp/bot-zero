@@ -1,8 +1,45 @@
-import { ChatPostMessageArguments, ChatUpdateArguments, WebClient } from "@slack/web-api"
-import { IContext } from "hubot-command-mapper"
-import { createWebClient } from "./slack"
 import removeMarkDown from "remove-markdown"
-import { ChatPostMessageWebAPICallResult, ChatUpdateMessageWebAPICallResult, Message } from "./types"
+import {
+  Block,
+  ChatPostMessageArguments,
+  ChatUpdateArguments,
+  KnownBlock,
+  WebAPICallResult,
+  WebClient
+} from "@slack/web-api"
+
+type ChatPostMessageWebAPICallResult = WebAPICallResult & {
+  channel: string
+  ts: string
+  message: {
+    test: string
+    username: string
+    bot_id?: string
+    attachments: [
+      {
+        text: string
+        id: number
+        fallback: string
+      }
+    ]
+    type: string
+    subtype: string
+    ts: string
+  }
+}
+
+type ChatUpdateMessageWebAPICallResult = WebAPICallResult & {
+  channel: string
+  ts: string
+  text: string
+}
+
+type BlockMessage = {
+  text?: string
+  blocks?: (KnownBlock | Block)[]
+}
+
+type Message = BlockMessage | ChatPostMessageArguments | ChatUpdateArguments | string
 
 async function sendMessage(webClient: WebClient, msg: ChatPostMessageArguments | ChatUpdateArguments) {
   if (msg.ts) {
@@ -22,19 +59,19 @@ function isString(x: any): x is string {
 }
 
 export class UpdatableMessage {
-  private message?: Message
-  private nextMessage?: Message
-  private sending?: Promise<string>
+  private message?: Message | null
+  private nextMessage?: Message | null
+  private sending?: Promise<any>
   private isSending = false
 
   constructor(
     private readonly webClient: WebClient,
     private channel: string,
-    private ts: string,
-    private readonly threadTs: string
+    private ts: string | null,
+    private readonly threadTs: string | null = null
   ) {}
 
-  async waitForAllToBenSent(): Promise<string | null> {
+  async waitForAllToBenSent() {
     if (this.sending) {
       await this.sending
       await delay(500)
@@ -43,7 +80,7 @@ export class UpdatableMessage {
     return this.ts
   }
 
-  async send(msg: Message): Promise<string> {
+  async send(msg: Message): Promise<string | null> {
     // don't send empty or the same message
     if (!msg || msg === this.message) {
       return this.getTs()
@@ -62,7 +99,7 @@ export class UpdatableMessage {
     if (isString(msg)) {
       if (msg.length >= 3000) {
         msg = {
-          text: msg,
+          text: msg
         }
       } else {
         msg = {
@@ -71,11 +108,11 @@ export class UpdatableMessage {
               type: "section",
               text: {
                 type: "mrkdwn",
-                text: msg,
-              },
-            },
+                text: msg
+              }
+            }
           ],
-          text: removeMarkDown(msg),
+          text: removeMarkDown(msg)
         }
       }
     }
@@ -87,8 +124,8 @@ export class UpdatableMessage {
         ts: this.ts,
         channel: this.channel,
         as_user: true,
-        thread_ts: this.threadTs,
-      },
+        thread_ts: this.threadTs
+      }
     }
 
     // clear blocks from previous message is we have to
@@ -126,10 +163,12 @@ export class UpdatableMessage {
     this.ts = null
 
     // delete this message
-    await this.webClient.chat.delete({
-      ts: ts,
-      channel: this.channel,
-    })
+    if (ts) {
+      await this.webClient.chat.delete({
+        ts,
+        channel: this.channel
+      })
+    }
   }
 }
 
@@ -139,22 +178,4 @@ export function delay(ms: number): Promise<void> {
       r()
     }, ms)
   })
-}
-
-export function createUpdatableMessage(channel: string | IContext, initialMessage: Message = null) {
-  let channelId = ""
-  let thread_ts = null
-
-  if (isString(channel)) {
-    channelId = channel
-  } else {
-    channelId = channel.res.message.room
-    thread_ts = (<any>channel).res.message.thread_ts
-  }
-
-  let msg = new UpdatableMessage(createWebClient(), channelId, null, thread_ts)
-  if (initialMessage) {
-    msg.send(initialMessage)
-  }
-  return msg
 }

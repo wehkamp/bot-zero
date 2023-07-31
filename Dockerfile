@@ -1,26 +1,13 @@
-FROM node:18-alpine AS buildstep
+FROM node:18-alpine
 
 WORKDIR /bot-zero
 COPY package.json .
 COPY package-lock.json .
 
-RUN npm ci
+RUN npm ci --omit=dev
 
 COPY src ./src
-COPY tsconfig.json .
-
-RUN npm run build
-
-
-FROM node:18-alpine AS runtime
-
-WORKDIR /bot-zero
-COPY package.json .
-COPY package-lock.json .
-
-RUN npm ci --production
-
+COPY *.json .
 COPY external-scripts.json ./dist/external-scripts.json
-COPY --from=buildstep /bot-zero/dist ./dist
 
 CMD ["npm", "start"]

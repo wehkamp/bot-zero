@@ -1,21 +1,21 @@
 {
-	"name": "Bot Zero",
-	"dockerFile": "Dockerfile",
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"ms-azuretools.vscode-docker",
-				"esbenp.prettier-vscode",
-				"eamodio.gitlens",
-				"baileyfirman.vscode-back-forward-buttons",
-				"streetsidesoftware.code-spell-checker",
-				"mikestead.dotenv",
-				"herrmannplatz.npm-dependency-links",
-				"wayou.vscode-todo-highlight",
-				"nsoult.typescript-imports-sort"
-			]
-		}
-	},
-	"postStartCommand": "/startup.sh",
-	"postAttachCommand": "bash"
+  "name": "Bot Zero",
+  "dockerFile": "Dockerfile",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "esbenp.prettier-vscode",
+        "eamodio.gitlens",
+        "baileyfirman.vscode-back-forward-buttons",
+        "streetsidesoftware.code-spell-checker",
+        "mikestead.dotenv",
+        "herrmannplatz.npm-dependency-links",
+        "wayou.vscode-todo-highlight",
+        "nsoult.typescript-imports-sort",
+        "miclo.sort-typescript-imports"
+      ]
+    }
+  },
+  "postStartCommand": "/startup.sh"
 }
