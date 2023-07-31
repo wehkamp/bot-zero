@@ -9,7 +9,7 @@
 // Author:
 //  KeesCBakker (kbakker@wehkamp.nl)
 
-import { map_tool, StringParameter, NumberParameter } from "hubot-command-mapper"
+import { StringParameter, NumberParameter } from "hubot-command-mapper"
 import fetch from "node-fetch"
 import { BotZero } from "../common/BotZero"
 
