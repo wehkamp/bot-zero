@@ -1,16 +1,10 @@
 # bot-zero
 
-<a href="https://hubot.github.com/">Hubot</a> is a fantastic project that enabled us to build great bots. The **bot-zero** project aims to give you a cleaned up version with some examples that run on TypeScript (instead of Coffee-script).
+<a href="https://hubot.github.com/">Hubot</a> is a fantastic project that enabled us to build great bots. The **bot-zero** project aims to give you a cleaned up version with some examples that run on TypeScript (instead of Coffee-script). This bot uses the <a href="https://slack.dev/bolt-js/">Slack Bolt</a>.
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/wehkamp/bot-zero/blob/master/LICENSE.md)
 
 Blog: https://medium.com/wehkamp-techblog/jump-starting-slack-bot-projects-bot-zero-991b9654585e
-
-**⚠️ WHATEVER YOU DO... NEVER (!!) LISTEN TO THIS ON SLACK! ⚠️**
-
-> Slack has improved how we handle permissions for apps, so you can now request only the specific scopes your app needs. We recommend updating your app’s scopes.
-
-**⚠️ YOU'LL END UP WRECKING YOUR SETUP. ⚠️**
 
 ## Getting started
 

@@ -1,57 +1,68 @@
-import { getConfig, validateToken, convertConfigIntoCrossEnvParameters } from "./env"
-import fs from "fs"
-import { spawn } from "child_process"
-import { chalker } from "chalk-with-markers"
+import dotenv from "dotenv"
+import { validateConfg } from "./env"
+dotenv.config()
+validateConfg()
 
-function compileAndStart(params: string[]) {
-  console.log()
-  console.log(chalker.colorize("[p]Compiling..."))
+import path from "path"
+import { asciiArtChalker, chalker } from "chalk-with-markers"
+import removeMarkDown from "remove-markdown"
+import {
+  removeTrailingBotWhitespaceCharactersFromIncomingMessages,
+  removeTrailingWhitespaceCharactersFromIncomingMessages
+} from "hubot-command-mapper"
+import { start } from "./common/BotZero"
 
-  let npm = /^win/.test(process.platform) ? "npm.cmd" : "npm"
-  spawn(npm, ["run", "build", "--silent"], { stdio: "inherit" }).on("close", code => {
-    if (code != 0) {
-      process.exit(-1)
+// start bot async
+;(async () => {
+  let scriptsPath = path.join(__dirname, "scripts")
+  let { info, robot } = await start(scriptsPath)
+
+  // register middleware
+  removeMarkdownFromInput(robot)
+  removeTrailingWhitespaceCharactersFromIncomingMessages(robot)
+  removeTrailingBotWhitespaceCharactersFromIncomingMessages(robot)
+
+  splash()
+
+  console.log(
+    // debug info
+    chalker.colorize(`
+[q]Bot name: [y]@${info.botName}
+[q]App URL:  [y]${info.appUrl}
+[q]Version:  [y]${process.env.npm_package_version}
+[q]PID:      [y]${process.pid}
+
+[g]Started!`)
+  )
+})()
+
+function splash() {
+  console.log(
+    asciiArtChalker.colorize(`
+ppp__________        __    __________                    
+b\\______   \\ _____/  |_  \\____    /___________  bbb____  
+cc |    |  _//  _ \\   __\\   /     // __ \\_  __ \\/  _ \\ 
+pp |    |   (  <_> )  |    pp/     /p\\  ___/|  | \\(  <_> ) 
+b |______  /\\____/|__|   pp/_______b \\___  >__|   \\____/  y[v4]
+ccc        \\/            c          \\/   \\/                        
+  `)
+  )
+
+  console.log("⚡ Powered with Slack Bolt + Hubot Command Mapper ⚡")
+}
+
+export function removeMarkdownFromInput(robot: Hubot.Robot) {
+  if (!robot) throw "Argument 'robot' is empty."
+
+  robot.receiveMiddleware((context, next, done) => {
+    const text = context.response.message.text
+    if (text) {
+      let newText = removeMarkDown(text)
+      if (text != newText) {
+        context.response.message.text = newText
+      }
     }
 
-    start(params)
+    next(done)
   })
-}
-
-function start(params: string[]) {
-  // dist directory must be available, it is after building
-  if (process.env.TS_NODE_DEV) {
-    fs.copyFileSync("./external-scripts.json", "./dist/external-scripts.json")
-  }
-
-  // change directory because of Typescript, must be done
-  // after loading config, because the config is located in
-  // the root!
-  process.chdir("dist/")
-
-  console.log(chalker.colorize("[b]Starting..."))
-
-  // feed it to cross env - this will start Hubot with Slack
-  require("cross-env")(params)
-}
-
-// load config for .env file - they are optional
-const config = getConfig("./.env")
-
-// will exit with error message when invalid!
-validateToken(config)
-
-// convert config into Hubot start
-const params = convertConfigIntoCrossEnvParameters(config)
-params.push("hubot")
-params.push("--adapter")
-params.push("slack")
-params.push("--disable-httpd")
-
-// if we are started by ts-node-dev, we need to
-// do a build first, so we have a filled scripts
-// directory for Hubot
-if (process.env.TS_NODE_DEV) {
-  compileAndStart(params)
-} else {
-  start(params)
 }

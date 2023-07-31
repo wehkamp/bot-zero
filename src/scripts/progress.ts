@@ -8,8 +8,8 @@
 //  KeesCBakker (kbakker@wehkamp.nl)
 "strict"
 
-import { map_command } from "hubot-command-mapper"
-import { createUpdatableMessage, delay } from "../common/UpdatableMessage"
+import { delay } from "../common/UpdatableMessage"
+import { BotZero } from "../common/BotZero"
 
 const steps = [
   "Preparing environment...",
@@ -22,14 +22,14 @@ const steps = [
   "Preparing for launch...",
   "Validating details...",
   "Organizing a pre-launch party...",
-  "Done!",
+  "Done!"
 ]
 
-module.exports = robot => {
-  map_command(robot, "progress", async context => {
+module.exports = (robot: BotZero) => {
+  robot.mapCommand("progress", async context => {
     // the channel is needed for interaction by the Slack
     // API - this works also for private messages to the bot
-    const msg = createUpdatableMessage(context)
+    const msg = robot.createUpdatableMessage(context)
 
     msg.send("Showing an example of a progress indicator... *0%*")
 

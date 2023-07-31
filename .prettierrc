@@ -1,8 +1,9 @@
 {
-  "tabWidth": 2,
-  "useTabs": false,
   "semi": false,
+  "useTabs": false,
+  "tabWidth": 2,
+  "arrowParens": "avoid",
   "endOfLine": "lf",
   "printWidth": 120,
-  "arrowParens": "avoid"
+  "trailingComma": "none"
 }
