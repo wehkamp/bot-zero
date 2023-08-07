@@ -11,6 +11,7 @@
     "@types/node-fetch": "^2.6.4",
     "@types/remove-markdown": "^0.3.1",
     "chalk-with-markers": "^1.0.24",
+    "coffeescript": "^2.7.0",
     "dotenv": "^16.3.1",
     "hubot": "^7.0.0",
     "hubot-command-mapper": "^4.0.5",
