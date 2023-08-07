@@ -170,6 +170,16 @@ export class UpdatableMessage {
       })
     }
   }
+
+  async executeWithErrorHandling<T>(errorMessageOnFail: string, handler: (msg: UpdatableMessage) => Promise<T>) {
+    try {
+      return await handler(this)
+    } catch (ex) {
+      console.error(errorMessageOnFail, ex)
+      await this.send(errorMessageOnFail + "\n```" + ex + "\n```\n")
+      return null
+    }
+  }
 }
 
 export function delay(ms: number): Promise<void> {
@@ -178,4 +188,23 @@ export function delay(ms: number): Promise<void> {
       r()
     }, ms)
   })
+}
+
+export function createUpdatableMessage(channel: string | IContext, initialMessage: Message | string = null) {
+  let channelId = ""
+  let thread_ts = null
+
+  if (typeof channel === "string") {
+    channelId = channel
+  } else {
+    channelId = channel.res.message.room
+    thread_ts = (<any>channel).res.message.thread_ts
+  }
+
+  let client = new WebClient(process.env.HUBOT_SLACK_BOT_TOKEN as string)
+  let msg = new UpdatableMessage(client, channelId, null, thread_ts)
+  if (initialMessage) {
+    msg.send(initialMessage)
+  }
+  return msg
 }
