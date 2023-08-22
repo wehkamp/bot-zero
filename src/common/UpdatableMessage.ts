@@ -7,6 +7,7 @@ import {
   WebAPICallResult,
   WebClient
 } from "@slack/web-api"
+import { IContext } from "hubot-command-mapper"
 
 type ChatPostMessageWebAPICallResult = WebAPICallResult & {
   channel: string
@@ -190,19 +191,26 @@ export function delay(ms: number): Promise<void> {
   })
 }
 
-export function createUpdatableMessage(channel: string | IContext, initialMessage: Message | string = null) {
+export function createUpdatableMessage(
+  channel: string | IContext | Hubot.Response,
+  initialMessage: Message | string = null
+) {
   let channelId = ""
   let thread_ts = null
+  let ts = null
 
   if (typeof channel === "string") {
     channelId = channel
+  } else if ("message" in channel) {
+    channelId = channel.message.room
+    thread_ts = (<any>channel).message.thread_ts
   } else {
     channelId = channel.res.message.room
     thread_ts = (<any>channel).res.message.thread_ts
   }
 
   let client = new WebClient(process.env.HUBOT_SLACK_BOT_TOKEN as string)
-  let msg = new UpdatableMessage(client, channelId, null, thread_ts)
+  let msg = new UpdatableMessage(client, channelId, ts, thread_ts)
   if (initialMessage) {
     msg.send(initialMessage)
   }
