@@ -10,6 +10,7 @@
 
 import { delay } from "../common/UpdatableMessage"
 import { BotZero } from "../common/BotZero"
+import { map_command } from "hubot-command-mapper"
 
 const steps = [
   "Preparing environment...",
@@ -26,7 +27,7 @@ const steps = [
 ]
 
 module.exports = (robot: BotZero) => {
-  robot.mapCommand("progress", async context => {
+  map_command(robot, "progress", async context => {
     // the channel is needed for interaction by the Slack
     // API - this works also for private messages to the bot
     const msg = robot.createUpdatableMessage(context)

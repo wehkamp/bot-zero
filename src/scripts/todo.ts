@@ -9,64 +9,60 @@
 // Author:
 //  KeesCBakker (kbakker@wehkamp.nl)
 
-import { AnyParameter } from "hubot-command-mapper"
+import { RestParameter } from "hubot-command-mapper"
 import { BotZero } from "../common/BotZero"
+import { Tool } from "../common/fluent"
 
 module.exports = (robot: BotZero) => {
-  let todos = []
+  let todos = new Array<string>()
+  let tool = new Tool("todo")
 
-  robot.mapTool({
-    name: "todo",
-    commands: [
-      {
-        name: "secret",
-        alias: ["scrt"],
-        auth: ["kz"],
-        execute: context => {
-          context.reply("⚡ You've found the secret! ⚡")
-        }
-      },
-      {
-        name: "add",
-        alias: [""],
-        parameters: [new AnyParameter("item")],
-        execute: context => {
-          const item = context.values.item
-          todos.push(item)
-          context.reply(`Added _${item}_ to the list.`)
-        }
-      },
-      {
-        name: "remove",
-        alias: ["rm", "del"],
-        parameters: [new AnyParameter("item")],
-        execute: context => {
-          let item = context.values.item.toLowerCase()
-          let length = todos.length
-          todos = todos.filter(f => f.toLowerCase().indexOf(item) === -1)
-          let i = length - todos.length
-          if (i === 1) {
-            context.reply("1 item was removed.")
-          } else {
-            context.reply(`${i} items were removed.`)
-          }
-        }
-      },
-      {
-        name: "list",
-        alias: ["", "lst", "ls"],
-        execute: context => {
-          if (todos.length === 0) {
-            context.reply("The list is empty.")
-            return
-          }
+  tool
+    .addCommand("secret")
+    .alias("scrt")
+    .auth("kz")
+    .onExecute(context => context.res.reply("⚡ You've found the secret! ⚡"))
 
-          let i = 0
-          let str = "The following items are on the list:\n"
-          str += todos.map(t => `${++i}. ${t}`).join("\n")
-          context.reply(str)
-        }
+  tool
+    .addCommand("add")
+    .alias("")
+    .addParameter(new RestParameter("item"))
+    .onExecute(context => {
+      const item = context.values.item
+      todos.push(item)
+      context.res.reply(`Added _${item}_ to the list.`)
+    })
+
+  tool
+    .addCommand("remove")
+    .alias("rm", "del")
+    .addParameter(new RestParameter("item"))
+    .onExecute(context => {
+      let item = context.values.item.toLowerCase()
+      let length = todos.length
+      todos = todos.filter(f => f.toLowerCase().indexOf(item) === -1)
+      let i = length - todos.length
+      if (i === 1) {
+        context.res.reply("1 item was removed.")
+      } else {
+        context.res.reply(`${i} items were removed.`)
       }
-    ]
-  })
+    })
+
+  tool
+    .addCommand("list")
+    .alias("", "lst", "ls")
+    .onExecute(context => {
+      if (todos.length === 0) {
+        context.res.reply("The list is empty.")
+        return
+      }
+
+      let i = 0
+      let str = "The following items are on the list:\n"
+      str += todos.map(t => `${++i}. ${t}`).join("\n")
+      context.res.reply(str)
+    })
+
+  tool.map(robot)
 }
