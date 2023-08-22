@@ -24,7 +24,7 @@ module.exports = (robot: Hubot.Robot) => {
 function getHelpCommands(robot: Hubot.Robot) {
   let helpCommands = robot.helpCommands()
 
-  const robotName = "- @" + robot.name
+  const robotName = "- <@" + robot.name + ">"
 
   helpCommands = helpCommands.map(command => {
     if (robotName.length === 1) {
