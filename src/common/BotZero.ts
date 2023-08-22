@@ -1,25 +1,28 @@
 import fs from "fs"
 import path from "path"
-import { alias, IContext, IOptions, IParameter, ITool, map_command, map_tool } from "hubot-command-mapper"
-import { FilesUploadArguments, WebClient, WebAPICallResult } from "@slack/web-api"
+import { createUpdatableMessage, UpdatableMessage } from "./UpdatableMessage"
+import { createWebClient, uploadByContext } from "./slack"
+import { IContext } from "hubot-command-mapper"
 import { Message } from "hubot"
 import { Robot } from "hubot/es2015"
 import { SocketModeReceiver } from "@slack/bolt"
-import { UpdatableMessage } from "./UpdatableMessage"
+import { WebAPICallResult, WebClient } from "@slack/web-api"
 
 export type BotZero = Hubot.Robot & {
-  mapCommand(command: string, ...args: (IParameter | ChatCallback | IOptions)[]): void
-  mapTool(tool: ChatTool, options?: IOptions): void
-  mapAlias(map: Record<string, string>, options?: IOptions): void
+  readonly app: SocketModeReceiver
+  readonly client: WebClient
+
   upload(
-    context: ChatContext,
+    context: IContext,
     comment: string,
     fileName: string,
     data: Buffer | string,
+    thread_ts?: string,
     filetype?: string
   ): Promise<WebAPICallResult>
-  createUpdatableMessage(ChatContext): UpdatableMessage
-  createUpdatableMessage(ChatContext, initialMessage: Message): void
+
+  createUpdatableMessage(channel: IContext | string): UpdatableMessage
+  createUpdatableMessage(channel: IContext | string, initialMessage: Message | string): UpdatableMessage
 }
 
 const HUBOT_SLACK_ADAPTER = "@hubot-friends/hubot-slack"
@@ -32,165 +35,91 @@ class MyBotZero extends Robot {
     super(HUBOT_SLACK_ADAPTER, false, name)
   }
 
-  async start(scriptsDir: string) {
+  async start(scriptsDir: string, externalScriptsJsonFile: string) {
     let bot = <any>this
 
-    await bot.loadAdapter(HUBOT_SLACK_ADAPTER)
+    await bot.loadAdapter()
 
     this.app = bot.adapter.socket
     this.client = bot.adapter.client.web
 
-    // Read all files in the directory
+    // Read all files in the scripts directory
     let files = await fs.promises.readdir(scriptsDir)
     files
       .filter(file => path.extname(file) == ".ts")
+      .sort()
       .map(file => path.resolve(scriptsDir, file))
       .forEach(file => {
         // Load and run the default export from the TypeScript file
-        const script = require(file)
-        script(this)
 
-        // TODO: add to Hubot typings?
-        bot.parseHelp(file)
+        try {
+          const script = require(file)
+
+          if (script.default) {
+            script.default(this)
+          } else {
+            script(this)
+          }
+
+          // TODO: add to Hubot typings?
+          bot.parseHelp(file)
+        } catch (ex) {
+          ;(bot as Hubot.Robot).logger.error(ex, "Could not load script: " + file)
+          throw ex
+        }
       })
+
+    //
+
+    let externalScriptsExists = await fs.promises
+      .access(externalScriptsJsonFile)
+      .then(() => true)
+      .catch(() => false)
+
+    if (!externalScriptsExists) return
+
+    let externalJsonBuffer = await fs.promises.readFile(externalScriptsJsonFile)
+    try {
+      require("coffeescript/register")
+      bot.loadExternalScripts(JSON.parse(externalJsonBuffer.toString()))
+    } catch (error) {
+      console.error(`Error parsing JSON data from external-scripts.json: ${error}`)
+      process.exit(1)
+    }
 
     bot.run()
   }
 
-  mapCommand(command: string, ...args: (IParameter | ChatCallback | IOptions)[]): void {
-    let callback = args.find(a => a instanceof Function) as ChatCallback
-    if (!callback) throw "Missing callback function."
-
-    let applyArgs = []
-    applyArgs.push(this)
-    applyArgs.push(command)
-    applyArgs = applyArgs.concat(args.filter(a => !(a instanceof Function)))
-    applyArgs.push((context: IContext) => callback(new HubotChatContext(context)))
-
-    map_command.apply(this, applyArgs)
+  upload(
+    context: IContext,
+    comment: string,
+    fileName: string,
+    data: Buffer | string,
+    thread_ts?: string,
+    filetype?: string
+  ) {
+    return uploadByContext(context, comment, fileName, data, thread_ts, filetype)
   }
 
-  mapTool(tool: ChatTool, options?: IOptions) {
-    // map the ChatTool to a ITool
-    var theTool = <ITool>{
-      name: tool.name,
-      commands: tool.commands.map(command => ({
-        name: command.name,
-        auth: command.auth,
-        parameters: command.parameters,
-        alias: command.alias,
-        execute: context => command.execute(new HubotChatContext(context))
-      })),
-      auth: tool.auth
-    }
-
-    map_tool(this as any, theTool, options)
+  createUpdatableMessage(channel: string | IContext, initialMessage: Message | string = null) {
+    return createUpdatableMessage(channel, initialMessage)
   }
 
-  mapAlias(map: Record<string, string>, options?: IOptions) {
-    alias(this as any, map, options)
-  }
-
-  upload(context: ChatContext, comment: string, fileName: string, data: Buffer | string, filetype?: string) {
-    let options: FilesUploadArguments = {
-      filename: fileName,
-      channel_id: context.channel,
-      initial_comment: comment,
-      title: fileName
-    }
-
-    if (data instanceof Buffer) {
-      options.file = data
-    } else {
-      options.content = data
-      options.filetype = filetype
-    }
-
-    if (context.thread_ts != null) {
-      options.thread_ts = context.thread_ts.toString()
-    }
-
-    return this.client.files.uploadV2(options)
-  }
-
-  createUpdatableMessage(channel: string | ChatContext, initialMessage: Message = null) {
-    let channelId = ""
-    let thread_ts = null
-
-    if (typeof channel === "string") {
-      channelId = channel
-    } else {
-      channelId = channel.channel
-      thread_ts = channel.thread_ts
-    }
-
-    let msg = new UpdatableMessage(this.client, channelId, null, thread_ts)
-    if (initialMessage) {
-      msg.send(initialMessage)
-    }
-    return msg
+  asBotZero() {
+    return this as unknown as BotZero
   }
 }
 
-class HubotChatContext implements ChatContext {
-  values: Record<string, any>
-  channel: string
-  thread_ts: string
+export async function start(scriptsDir: string, externalScriptsJsonFile: string) {
+  // So we need to get the name of the bot
+  // when we start the bot, otherwise command
+  // mapping will not be successful
+  let client = createWebClient()
+  let info = await getBotInfo(client)
 
-  constructor(private context: IContext) {
-    this.values = context.values
-    this.channel = context.res.message.room
-    this.thread_ts = (<any>context.res.message).thread_ts
-  }
-
-  reply(str: string): void {
-    this.context.res.reply(str)
-  }
-  emote(str: string): void {
-    this.context.res.emote(str)
-  }
-}
-
-export type ChatTool = {
-  name: string
-  commands: ChatCommand[]
-  auth?: string[]
-}
-
-export type ChatCommand = {
-  name: string
-  auth?: string[]
-  parameters?: IParameter[]
-  alias?: string[]
-  execute(context: ChatContext): void
-}
-
-export type ChatContext = {
-  reply(str: string): void
-  emote(str: string): void
-  values: Record<string, any>
-  channel: string
-  thread_ts: string
-}
-
-export type ChatCallback = {
-  (context: ChatContext): void
-}
-
-export type ChatMessage = {
-  text: string
-}
-
-export type ChatMiddleware = {
-  (mesage: ChatMessage): Promise<void>
-}
-
-export async function start(scriptsDir: string) {
-  var robot = new MyBotZero("baymax")
-  await robot.start(scriptsDir)
-
-  let info = await getBotInfo(robot.client)
-  ;(<any>robot).name = info.botName
+  // init bot
+  var robot = new MyBotZero(info.botName)
+  await robot.start(scriptsDir, externalScriptsJsonFile)
 
   return {
     robot: robot as unknown as BotZero,
@@ -213,7 +142,7 @@ async function getBotInfo(client: WebClient): Promise<BotInfo> {
   }
 }
 
-export type BotInfo = {
+type BotInfo = {
   botId: string
   botUserId: string
   botName: string

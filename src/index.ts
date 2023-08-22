@@ -15,7 +15,8 @@ import { start } from "./common/BotZero"
 // start bot async
 ;(async () => {
   let scriptsPath = path.join(__dirname, "scripts")
-  let { info, robot } = await start(scriptsPath)
+  let externalScriptsJsonFile = path.join(__dirname, "..", "external-scripts.json")
+  let { info, robot } = await start(scriptsPath, externalScriptsJsonFile)
 
   // register middleware
   removeMarkdownFromInput(robot)

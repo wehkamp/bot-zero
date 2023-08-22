@@ -18,8 +18,8 @@ details to your `.env` file.
 
 ```yml
 display_information:
-  name: BotZero
-  description: A friendly Slack bot using Bolt and Hubot.
+  name: Jarvis
+  description: Our DevOps bot.
   background_color: "#3d001d"
 features:
   app_home:
@@ -27,7 +27,7 @@ features:
     messages_tab_enabled: true
     messages_tab_read_only_enabled: false
   bot_user:
-    display_name: BotZero
+    display_name: Jarvis-Beta
     always_online: true
 oauth_config:
   scopes:
@@ -38,11 +38,14 @@ oauth_config:
       - chat:write
       - im:write
       - im:history
+      - im:read
       - users:read
       - groups:history
       - groups:write
+      - groups:read
       - mpim:history
       - mpim:write
+      - mpim:read
 settings:
   event_subscriptions:
     bot_events:
