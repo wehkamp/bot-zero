@@ -5,8 +5,8 @@
   "author": "Wehkamp (kbakker@wehkamp.nl)",
   "description": "An 'empty' Slack Bot that can be the jump start for your own bot. It is based on the Hubot project.",
   "dependencies": {
-    "@hubot-friends/hubot-slack": "^1.0.6",
-    "@slack/bolt": "^3.13.2",
+    "@hubot-friends/hubot-slack": "^1.0.8",
+    "@slack/bolt": "^3.13.3",
     "@types/hubot": "^3.3.2",
     "@types/node-fetch": "^2.6.4",
     "@types/remove-markdown": "^0.3.1",
@@ -14,18 +14,21 @@
     "coffeescript": "^2.7.0",
     "dotenv": "^16.3.1",
     "hubot": "^7.0.0",
-    "hubot-command-mapper": "^4.0.5",
+    "hubot-command-mapper": "^8.0.1",
     "node-fetch": "^2.6.12",
     "remove-markdown": "^0.5.0",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
+    "prettier": "^3.0.2",
     "ts-node-dev": "^2.0.0"
   },
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "ts-node-dev --respawn --poll --interval 1000 --transpile-only src/index.ts",
-    "test": "echo \"Bot Zero IV has no tests...\" & exit 0"
+    "test": "echo \"Bot Zero IV has no tests...\" & exit 0",
+    "build": "tsc --diagnostics",
+    "format": "prettier --config .prettierrc {test,src}/**/*.ts --write"
   },
   "main": "dist/src/index.js",
   "repository": {
