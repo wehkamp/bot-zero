@@ -1,11 +1,11 @@
 import dotenv from "dotenv"
-import { validateConfg } from "./env"
+import { validateConfig } from "./env"
 dotenv.config()
-validateConfg()
+validateConfig()
 
 import path from "path"
-import { asciiArtChalker, chalker } from "chalk-with-markers"
 import removeMarkDown from "remove-markdown"
+import { asciiArtChalker, chalker } from "chalk-with-markers"
 import {
   removeTrailingBotWhitespaceCharactersFromIncomingMessages,
   removeTrailingWhitespaceCharactersFromIncomingMessages
@@ -14,8 +14,13 @@ import { start } from "./common/BotZero"
 
 // start bot async
 ;(async () => {
+  process.on("SIGTERM", () => process.exit())
+
   let scriptsPath = path.join(__dirname, "scripts")
-  let externalScriptsJsonFile = path.join(__dirname, "..", "external-scripts.json")
+  let externalScriptsJsonFile = process.env.TS_NODE_DEV
+    ? path.join(__dirname, "..", "external-scripts.json")
+    : path.join(__dirname, "..", "..", "external-scripts.json")
+
   let { info, robot } = await start(scriptsPath, externalScriptsJsonFile)
 
   // register middleware
@@ -52,7 +57,7 @@ ccc        \\/            c          \\/   \\/
   console.log("⚡ Powered with Slack Bolt + Hubot Command Mapper ⚡")
 }
 
-export function removeMarkdownFromInput(robot: Hubot.Robot) {
+function removeMarkdownFromInput(robot: Hubot.Robot) {
   if (!robot) throw "Argument 'robot' is empty."
 
   robot.receiveMiddleware((context, next, done) => {
