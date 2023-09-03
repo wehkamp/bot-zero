@@ -26,12 +26,14 @@
     "@types/node-fetch": "^3.0.2",
     "@types/remove-markdown": "^0.3.1",
     "prettier": "^3.0.2",
+    "rimraf": "^5.0.1",
     "ts-node-dev": "^2.0.0"
   },
   "scripts": {
     "start": "node dist/src/index.js",
     "dev": "ts-node-dev --respawn --poll --interval 1000 --transpile-only src/index.ts",
     "test": "echo \"Bot Zero IV has no tests...\" & exit 0",
+    "prebuild": "rimraf dist",
     "build": "tsc --diagnostics",
     "format": "prettier --config .prettierrc {test,src}/**/*.ts --write"
   },
