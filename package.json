@@ -7,26 +7,33 @@
   "dependencies": {
     "@hubot-friends/hubot-slack": "^1.0.8",
     "@slack/bolt": "^3.13.3",
-    "@types/hubot": "^3.3.2",
-    "@types/node-fetch": "^2.6.4",
-    "@types/remove-markdown": "^0.3.1",
     "chalk-with-markers": "^1.0.24",
     "coffeescript": "^2.7.0",
     "dotenv": "^16.3.1",
     "hubot": "^7.0.0",
     "hubot-command-mapper": "^8.0.1",
     "node-fetch": "^2.6.12",
+    "pino": "^8.15.0",
+    "pino-pretty": "^10.2.0",
     "remove-markdown": "^0.5.0",
-    "ts-node": "^10.9.1"
+    "source-map-support": "^0.5.21"
   },
   "devDependencies": {
+    "@slack/bolt": "^3.13.3",
+    "@slack/web-api": "^6.9.0",
+    "@types/hubot": "^3.3.2",
+    "@types/node": "^20.5.1",
+    "@types/node-fetch": "^3.0.2",
+    "@types/remove-markdown": "^0.3.1",
     "prettier": "^3.0.2",
+    "rimraf": "^5.0.1",
     "ts-node-dev": "^2.0.0"
   },
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "node dist/src/index.js",
     "dev": "ts-node-dev --respawn --poll --interval 1000 --transpile-only src/index.ts",
     "test": "echo \"Bot Zero IV has no tests...\" & exit 0",
+    "prebuild": "rimraf dist",
     "build": "tsc --diagnostics",
     "format": "prettier --config .prettierrc {test,src}/**/*.ts --write"
   },
@@ -39,11 +46,5 @@
   "bugs": {
     "url": "https://github.com/wehkamp/bot-zero/issues"
   },
-  "homepage": "https://github.com/wehkamp/bot-zero#readme",
-  "resolutions": {
-    "json-schema": "0.4.0",
-    "ansi-regex": "6.0.1",
-    "strip-ansi": "7.0.1",
-    "string-width": "5.0.1"
-  }
+  "homepage": "https://github.com/wehkamp/bot-zero#readme"
 }

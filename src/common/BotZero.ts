@@ -1,5 +1,6 @@
 import fs from "fs"
 import path from "path"
+import pino from "pino"
 import { createUpdatableMessage, UpdatableMessage } from "./UpdatableMessage"
 import { createWebClient, uploadByContext } from "./slack"
 import { IContext } from "hubot-command-mapper"
@@ -40,13 +41,29 @@ class MyBotZero extends Robot {
 
     await bot.loadAdapter()
 
+    if (process.env.TS_NODE_DEV || process.env.ENVIRONMENT == "local") {
+      bot.logger = pino({
+        name: bot.name,
+        level: process.env.HUBOT_LOG_LEVEL || "warn",
+        transport: {
+          target: "pino-pretty",
+        },
+      })
+
+      Reflect.defineProperty(bot.logger, "warning", {
+        value: bot.logger.warn,
+        enumerable: true,
+        configurable: true,
+      })
+    }
+
     this.app = bot.adapter.socket
     this.client = bot.adapter.client.web
 
     // Read all files in the scripts directory
     let files = await fs.promises.readdir(scriptsDir)
     files
-      .filter(file => path.extname(file) == ".ts")
+      .filter(file => path.extname(file) == ".ts" || path.extname(file) == ".js")
       .sort()
       .map(file => path.resolve(scriptsDir, file))
       .forEach(file => {

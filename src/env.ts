@@ -1,13 +1,14 @@
 import { chalker } from "chalk-with-markers"
 
-export function validateConfg() {
+export function validateConfig() {
   validateToken("HUBOT_SLACK_BOT_TOKEN", "xoxb-")
   validateToken("HUBOT_SLACK_APP_TOKEN", "xapp-")
 }
 
 function validateToken(name: string, format: "xoxb-" | "xapp-") {
   const envMsg =
-    "your environment variables (for production) or to your .env file (for local development). You can find your Slack apps here: https://api.slack.com/apps"
+    "your environment variables (for production) or to your .env file (for local development). " +
+    "You can find your Slack apps here: https://api.slack.com/apps"
 
   const token = process.env[name]
 
