@@ -45,12 +45,12 @@ import { start } from "./common/BotZero"
 function splash() {
   console.log(
     asciiArtChalker.colorize(`
-ppp__________        __    __________                    
-b\\______   \\ _____/  |_  \\____    /___________  bbb____  
-cc |    |  _//  _ \\   __\\   /     // __ \\_  __ \\/  _ \\ 
-pp |    |   (  <_> )  |    pp/     /p\\  ___/|  | \\(  <_> ) 
+ppp__________        __    __________
+b\\______   \\ _____/  |_  \\____    /___________  bbb____
+cc |    |  _//  _ \\   __\\   /     // __ \\_  __ \\/  _ \\
+pp |    |   (  <_> )  |    pp/     /p\\  ___/|  | \\(  <_> )
 b |______  /\\____/|__|   pp/_______b \\___  >__|   \\____/  y[v4]
-ccc        \\/            c          \\/   \\/                        
+ccc        \\/            c          \\/   \\/
   `)
   )
 
@@ -60,7 +60,7 @@ ccc        \\/            c          \\/   \\/
 function removeMarkdownFromInput(robot: Hubot.Robot) {
   if (!robot) throw "Argument 'robot' is empty."
 
-  robot.receiveMiddleware((context, next, done) => {
+  robot.receiveMiddleware(async context => {
     const text = context.response.message.text
     if (text) {
       let newText = removeMarkDown(text)
@@ -69,6 +69,6 @@ function removeMarkdownFromInput(robot: Hubot.Robot) {
       }
     }
 
-    next(done)
+    return true
   })
 }
