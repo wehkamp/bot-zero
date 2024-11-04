@@ -6,7 +6,7 @@ import { createWebClient, uploadByContext } from "./slack"
 import { IContext } from "hubot-command-mapper"
 import { Message } from "hubot"
 import { Robot } from "hubot/es2015"
-import { SocketModeReceiver } from "@slack/bolt"
+import { App, SocketModeReceiver } from "@slack/bolt"
 import { WebAPICallResult, WebClient } from "@slack/web-api"
 
 export type BotZero = Hubot.Robot & {
@@ -29,8 +29,8 @@ export type BotZero = Hubot.Robot & {
 const HUBOT_SLACK_ADAPTER = "@hubot-friends/hubot-slack"
 
 class MyBotZero extends Robot {
-  app: SocketModeReceiver
   client: WebClient
+  app: App
 
   constructor(name: string) {
     super(HUBOT_SLACK_ADAPTER, false, name)
@@ -41,24 +41,41 @@ class MyBotZero extends Robot {
 
     await bot.loadAdapter()
 
-    if (process.env.TS_NODE_DEV || process.env.ENVIRONMENT == "local") {
-      bot.logger = pino({
-        name: bot.name,
-        level: process.env.HUBOT_LOG_LEVEL || "warn",
-        transport: {
-          target: "pino-pretty",
-        },
-      })
+    this.initLogging()
+    await this.loadLocalScripts(scriptsDir)
+    await this.loadExternalScripts(externalScriptsJsonFile)
 
-      Reflect.defineProperty(bot.logger, "warning", {
-        value: bot.logger.warn,
-        enumerable: true,
-        configurable: true,
-      })
-    }
+    bot.run()
 
-    this.app = bot.adapter.socket
+    this.app = await this.startBoltApp();
     this.client = bot.adapter.client.web
+  }
+
+  private initLogging() {
+    const isLocal = process.env.TS_NODE_DEV || process.env.ENVIRONMENT == "local"
+    if (!isLocal) return
+
+    const bot = this as any
+
+    bot.logger = pino({
+      name: bot.name,
+      level: process.env.HUBOT_LOG_LEVEL || "warn",
+      transport: {
+        target: "pino-pretty"
+      }
+    })
+
+    Reflect.defineProperty(bot.logger, "warning", {
+      value: bot.logger.warn,
+      enumerable: true,
+      configurable: true
+    })
+  }
+
+  private async loadLocalScripts(scriptsDir: string) {
+
+    // todo: check if we can use the default from Hubot
+    const bot = this.asHubot();
 
     // Read all files in the scripts directory
     let files = await fs.promises.readdir(scriptsDir)
@@ -67,27 +84,25 @@ class MyBotZero extends Robot {
       .sort()
       .map(file => path.resolve(scriptsDir, file))
       .forEach(file => {
-        // Load and run the default export from the TypeScript file
-
         try {
           const script = require(file)
 
+          // Load and run the default export from the TypeScript file
           if (script.default) {
             script.default(this)
           } else {
             script(this)
           }
 
-          // TODO: add to Hubot typings?
-          bot.parseHelp(file)
+          (bot as any).parseHelp(file)
         } catch (ex) {
-          ;(bot as Hubot.Robot).logger.error(ex, "Could not load script: " + file)
+          bot.logger.error(ex, "Could not load script: " + file)
           throw ex
         }
       })
+  }
 
-    //
-
+  private async loadExternalScripts(externalScriptsJsonFile: string) {
     let externalScriptsExists = await fs.promises
       .access(externalScriptsJsonFile)
       .then(() => true)
@@ -95,16 +110,48 @@ class MyBotZero extends Robot {
 
     if (!externalScriptsExists) return
 
+    let bot = this.asHubot();
+
     let externalJsonBuffer = await fs.promises.readFile(externalScriptsJsonFile)
     try {
       require("coffeescript/register")
-      bot.loadExternalScripts(JSON.parse(externalJsonBuffer.toString()))
-    } catch (error) {
-      console.error(`Error parsing JSON data from external-scripts.json: ${error}`)
-      process.exit(1)
+      let json = JSON.parse(externalJsonBuffer.toString())
+      bot.loadExternalScripts(json)
+    } catch (ex) {
+      bot.logger.error(ex, "Could not load external scripts from: " + externalScriptsJsonFile)
+      throw ex
     }
+  }
 
-    bot.run()
+  private async startBoltApp() {
+    return new Promise<App>(resolve => {
+      const adapter = <any>this.asBotZero().adapter
+
+      // when the adapter connects we can init the app:
+      adapter.on("connected", async () => {
+        const socket = adapter.client.socket
+
+        // when the app is created, an init is called; there is
+        // none on the socket, so add one:
+        socket.init = (app: App) => {
+          socket.on("slack_event", app.processEvent, app)
+        }
+
+        // create the Bolt app and reuse the socket from the adapter:
+        this.app = new App({
+          receiver: socket,
+          deferInitialization: true, // socket does the init
+          token: process.env.HUBOT_SLACK_BOT_TOKEN,
+          appToken: process.env.HUBOT_SLACK_APP_TOKEN,
+          signingSecret: process.env.SLACK_SIGNING_SECRET
+        })
+
+        // we need to init manually:
+        await this.app.init()
+
+        resolve(this.app)
+      })
+    })
   }
 
   upload(
@@ -124,6 +171,10 @@ class MyBotZero extends Robot {
 
   asBotZero() {
     return this as unknown as BotZero
+  }
+
+  asHubot() {
+    return this as unknown as Hubot.Robot
   }
 }
 
