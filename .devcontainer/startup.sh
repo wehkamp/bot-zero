@@ -4,7 +4,8 @@ set -e
 
 # trust the repo
 # fixes:
-# - fatal: detected dubious ownership in repository at '/workspaces/bot-zero'.
+# - fatal:   detected dubious ownership in repository at '/workspaces/bot-zero'.
+# - warning: safe.directory 'C:/{...}/blaze-platform-provisioning' not absolute
 git config --global --unset-all safe.directory > /dev/null 2>&1
 git config --global --add safe.directory "$PWD"
 
