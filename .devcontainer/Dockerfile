@@ -1,4 +1,3 @@
-# Start with the same base image
 FROM mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm
 
 # Upgrade NPM
